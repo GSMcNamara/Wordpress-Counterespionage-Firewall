@@ -13,10 +13,9 @@ Author URI: http://floodspark.com
 */
 
 //user agent string validation method:
-function check_ua() {
-	$uas = WP_REST_Request::get_header("User-Agent");
-	echo $uas;
-	echo "mcnamara";
+function check_ua(){
+	$uas = $_SERVER['HTTP_USER_AGENT'];
+//	echo $uas;
 }
 
 //perform all validations within:
