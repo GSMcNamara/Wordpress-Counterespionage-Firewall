@@ -66,7 +66,7 @@ async function privateCheck(callback) {
 
 function post () {
 	var xhr = new XMLHttpRequest();
-	xhr.open("POST", '//wp-json/floodspark/v1/cef/validate', true);
+	xhr.open("POST", '/wp-json/floodspark/v1/cef/validate', true);
 	xhr.setRequestHeader('Content-Type', 'application/json');
 	xhr.send(JSON.stringify(json));
 }
