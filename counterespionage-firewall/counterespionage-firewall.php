@@ -6,7 +6,7 @@
 /*
 Plugin Name: Counterespionage Firewall
 Plugin URI: http://wordpress.org/extend/plugins/counterespionage-firewall
-Description: CEF protects against reconnaissance by hackers and otherwise illegitimate traffic such as bots and scrapers. Increase performance, reduce fraud, thwart attacks, and serve your real customers.
+Description: CEF protects against reconnaissance by hackers and otherwise illegitimate traffic such as bots and scrapers. Increase performance, reduce fraud, thwart attacks, and serve your real customers. Tested on PHP 7.3.14. Note: WP-Cron needs to be enabled or the black and whitelist may grow indefinitely.
 Author: Floodspark
 Version: 1.0
 Author URI: http://floodspark.com
@@ -18,10 +18,12 @@ function get_ip() {
 		if ( array_key_exists( $key, $_SERVER ) === true ) {
 			foreach ( explode( ',', $_SERVER[$key] ) as $ip ) {
 				$ip = trim( $ip );
+//comment the following filter_var code when testing locally / not on the Internet
 				if ( filter_var( $ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) !== false ) {
 					return esc_attr( $ip );
 				}
-				return esc_attr($ip);
+//uncomment below if testing locally / not on Internet
+//				return esc_attr($ip);
 			}
 		}
 	}
@@ -31,14 +33,16 @@ function get_ip() {
 function check_lists($ip){
 	$list = get_option('fs_bw_list');
 	if(is_array($list) and !empty($list)){
-		return $list[$ip]["list_type"];
+		if (array_key_exists($ip,$list)){
+			return $list[$ip]["list_type"];
+		}
 	}
 	return false;
 }
 
 function add_to_list($ip, $list_type){
 	$list = get_option('fs_bw_list');
-	$list[$ip] = array("list_type" => $list_type, "expire" => date("m/d/Y h:i:s a", time() + 600)); //setting expiration time for 10 mins into future
+	$list[$ip] = array("list_type" => $list_type, "expire" => time() + 600); //setting expiration time for 10 mins into future
 	update_option('fs_bw_list',$list);
 }
 
@@ -100,10 +104,6 @@ function load_javascript () {
 	wp_enqueue_script( 'fs-js', plugin_dir_url( __FILE__ ) . 'js/fs.js');
 }
 
-function uninstall(){
-	delete_option('fs_bw_list');
-}
-
 function activate(){
 	add_option('fs_bw_list');
 	update_option('fs_bw_list',array());
@@ -111,12 +111,47 @@ function activate(){
 }
 
 function deactivate(){
-//	delete_option('fs_bw_list');
+	delete_option('fs_bw_list');
 }
 
+function list_purge_cron_exec() {
+        $list = get_option('fs_bw_list');
+        if(is_array($list) and !empty($list)){
+		foreach ($list as $ip => $meta_data){
+			$expire_time = $meta_data["expire"];
+			if (time() >= $expire_time){
+				unset($list[$ip]);
+				update_option('fs_bw_list',$list);
+			}
+		}
+        }
+}
+
+////for testing:
+//function example_add_cron_interval( $schedules ) {
+//	$schedules['five_seconds'] = array(
+//		'interval' => 5,
+//		'display'  => esc_html__( 'Every Five Seconds' ),
+//	);
+//
+//    return $schedules;
+//}
+
 add_action( 'wp_enqueue_scripts', 'load_javascript' ); 
+
 add_action( 'rest_api_init', 'fs_register_floodspark_routes' );
+
 add_action( 'init', 'validate' );
+
 register_activation_hook( __FILE__, 'activate' );
 register_deactivation_hook( __FILE__, 'deactivate' );
+
+add_action( 'list_purge_cron_hook', 'list_purge_cron_exec' );
+//for testing:
+//add_filter( 'cron_schedules', 'example_add_cron_interval' );
+if ( ! wp_next_scheduled( 'list_purge_cron_hook' ) ) {
+	wp_schedule_event( time(), '3600', 'list_purge_cron_hook' );
+	////for testing:
+	//wp_schedule_event( time(), 'five_seconds', 'list_purge_cron_hook' );
+}
 ?>
