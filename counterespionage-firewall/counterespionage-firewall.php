@@ -96,11 +96,32 @@ function fs_receive_values($request) {
 		if ($json) {
 			$input_json = json_decode($json, TRUE, 3);
 
+			//tor check
+			if (array_key_exists("screen.height", $input_json) and array_key_exists("window.innerHeight", $input_json)){
+				if ($input_json["screen.height"] == $input_json["window.innerHeight"]){
+					blacklist_and_die($ip);
+				}
+			}
 	
+			//Chrome incognito check
+			if (array_key_exists("storage", $input_json)){
+				if ($input_json["storage"] < 120000000){
+					blacklist_and_die($ip);
+				}
+			}
+
 			//Firefox private browsing check
 			$ffp_key = "browser.firefox.private";
 			if (array_key_exists($ffp_key, $input_json)){
 				if ($input_json[$ffp_key] == true){
+					blacklist_and_die($ip);
+				}
+			}
+			var_dump($input_json);
+
+			//Chrome Selenium check
+			if (array_key_exists("navigator.webdriver", $input_json)){
+				if ($input_json["navigator.webdriver"] == true){
 					blacklist_and_die($ip);
 				}
 			}
