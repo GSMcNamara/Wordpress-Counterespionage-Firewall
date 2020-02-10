@@ -57,6 +57,12 @@ function check_ua(){
 	return false;
 }
 
+function blacklist_and_die($ip){
+	add_to_list($ip, "black");
+	wp_die();
+
+}
+
 //route based on list check results; if not listed, subject to checks
 function validate() {
 	$ip = get_ip();
@@ -70,26 +76,39 @@ function validate() {
 		return;	
 	}else{ //do validations
 		if(check_ua()){
-			add_to_list($ip, "black");
-			wp_die();
+			blacklist_and_die($ip);
 		}
 	}
 }
 
-/**
- * This is our callback function to return a single product.
- *
- * @param WP_REST_Request $request This function accepts a rest request to process data.
- */
 function fs_receive_values($request) {
-    
-	return rest_ensure_response("all ok");
+	$ip = get_ip();
+	if($ip == 'unknown' or is_null($ip)) {
+		return;
+	}
+	$result = check_lists($ip);	
+	if($result == "black"){
+		wp_die();	
+	}elseif($result == "white"){
+		return;	
+	}else{ //do validations
+		$json = file_get_contents('php://input', FALSE, NULL, 0, 500); //limiting input to first 500 bytes to limit any attacks with huge values
+		if ($json) {
+			$input_json = json_decode($json, TRUE, 3);
+
+	
+			//Firefox private browsing check
+			$ffp_key = "browser.firefox.private";
+			if (array_key_exists($ffp_key, $input_json)){
+				if ($input_json[$ffp_key] == true){
+					blacklist_and_die($ip);
+				}
+			}
+		}
+	}
 }
 
  
-/**
- * This function is where we register our routes for our endpoint.
- */
 function fs_register_floodspark_routes() {
     // register_rest_route() handles more arguments but we are going to stick to the basics for now.
     register_rest_route( 'floodspark/v1/cef', '/validate', array(
@@ -127,17 +146,18 @@ function list_purge_cron_exec() {
         }
 }
 
-////for testing:
-//function example_add_cron_interval( $schedules ) {
-//	$schedules['five_seconds'] = array(
-//		'interval' => 5,
-//		'display'  => esc_html__( 'Every Five Seconds' ),
-//	);
-//
-//    return $schedules;
-//}
+function add_cron_interval( $schedules ) {
+	$schedules['ten_minutes'] = array(
+		'interval' => 600,
+		'display'  => esc_html__( 'Every Ten Minutes' ),
+	);
+
+    return $schedules;
+}
 
 add_action( 'wp_enqueue_scripts', 'load_javascript' ); 
+add_action( 'login_enqueue_scripts', 'load_javascript');
+add_action( 'admin_enqueue_scripts', 'load_javascript');
 
 add_action( 'rest_api_init', 'fs_register_floodspark_routes' );
 
@@ -147,11 +167,8 @@ register_activation_hook( __FILE__, 'activate' );
 register_deactivation_hook( __FILE__, 'deactivate' );
 
 add_action( 'list_purge_cron_hook', 'list_purge_cron_exec' );
-//for testing:
-//add_filter( 'cron_schedules', 'example_add_cron_interval' );
+add_filter( 'cron_schedules', 'add_cron_interval' );
 if ( ! wp_next_scheduled( 'list_purge_cron_hook' ) ) {
-	wp_schedule_event( time(), '3600', 'list_purge_cron_hook' );
-	////for testing:
-	//wp_schedule_event( time(), 'five_seconds', 'list_purge_cron_hook' );
+	wp_schedule_event( time(), 'ten_minutes', 'list_purge_cron_hook' );
 }
 ?>
