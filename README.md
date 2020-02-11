@@ -1,4 +1,4 @@
-# Floodspark Counterespionage Firewall (CEF) plugin for WordPress
+# Floodspark Counterespionage Firewall plugin for WordPress
 
 The CEF-WP plugin is free and open source. So far it can detect and block:
 
