@@ -12,7 +12,7 @@ Look for it soon in the official Wordpress plugin repo. It's undergoing review.
 
 The [Cyber Intent Blog](http://floodspark.com/blog/) is a living demonstration of the plugin hosted intentionally on cheap, shared hosting to prove that it works in even the most resource constrained environment.
 
-[Floodspark Counterespionage Firewall (CEF) – full version](https://github.com/GSMcNamara/Floodspark) has additional capabilities.
+[Floodspark Counterespionage Firewall (CEF) – full version](https://github.com/GSMcNamara/Floodspark) has additional capabilities.  
 [More info and FAQs](http://floodspark.com/)  
 Email: gs@floodspark.com  
 [Twitter](https://twitter.com/Floodspark)  
