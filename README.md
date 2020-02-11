@@ -1,7 +1,6 @@
-# Wordpress Counterespionage Firewall
-Floodspark Counterespionage Firewall (CEF) plugin for WordPress
+# Floodspark Counterespionage Firewall (CEF) plugin for WordPress
 
-The CEF WP plugin is free and open source. So far it can detect and block:
+The CEF-WP plugin is free and open source. So far it can detect and block:
 
 - Tor browser, with minor delay
 - Chrome Incognito, with minor delay, over HTTPS
