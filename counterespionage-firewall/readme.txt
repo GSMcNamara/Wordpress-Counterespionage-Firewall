@@ -2,10 +2,14 @@
 Contributors: floodspark
 Tags: security, hacking, appsec, firewall, recon, reconnaissance, bots, spam, fraud
 Donate link: http://floodspark.com/donate.html
-License: Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)
-License URI: https://creativecommons.org/licenses/by-nc/4.0/
+Requires at least: 5.3.2
+Tested up to: 5.3.2
+Requires PHP: 7.3.14
+Stable tag: 1.0
+License: GPLv2 or later
+License URI: https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html
 
-The Floodspark Counterespionage Firewall (CEF) WordPress plugin helps you block reconnaissance or otherwise illegitimate traffic including bots and scrapers. CEF for WordPress has some of the features of CEF Pro edition.
+The Floodspark Counterespionage Firewall (CEF) WordPress plugin helps you block reconnaissance or otherwise illegitimate traffic including bots and scrapers. CEF for WordPress has some of the features of CEF Full edition.
 
 == Description ==
 Floodspark Counterespionage Firewall (CEF) helps you block reconnaissance or otherwise illegitimate traffic. CEF is like a web application firewall (WAF) but protects against reconnaissance. Using Intent Indicators, CEF can detect and protect earlier than an Indicators of Compromise (IoCs) or IP blacklist-based solution. Increase performance, reduce fraud, thwart attacks, and serve your real customers.
@@ -30,3 +34,22 @@ How is an Intent Indicator different than an Indicator of Compromise (IoC)?
 BLUF: An Intent Indicator is earlier than an IoC. You can see why this is beneficial.
 
 An IOC indicates that a breach already took place, allowing you only to respond after the fact. Intent Indicators are the attacker’s traits, or Tactics, Techniques, and Procedures (TTPs), observable during the recon phase--traits, that with high confidence, would not belong to legitimate visitor traffic and behavior.
+
+== Screenshots ==
+ 
+1. This screen shot description corresponds to screenshot-1.(png|jpg|jpeg|gif). Note that the screenshot is taken from
+the /assets directory or the directory that contains the stable readme.txt (tags or trunk). Screenshots in the /assets
+directory take precedence. For example, `/assets/screenshot-1.png` would win over `/tags/4.3/screenshot-1.png`
+(or jpg, jpeg, gif).
+
+== Changelog ==
+ 
+= 1.0 =
+* Initial public release
+
+== Upgrade Notice ==
+ 
+= 1.0 =
+Initial public release
+
+
