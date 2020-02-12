@@ -13,7 +13,7 @@ Author URI: http://floodspark.com
 */
 
 ### Function: Get IP Address (http://stackoverflow.com/a/2031935)
-function get_ip() {
+function fs_cef_get_ip() {
 	foreach ( array( 'HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'HTTP_X_FORWARDED', 'HTTP_X_CLUSTER_CLIENT_IP', 'HTTP_FORWARDED_FOR', 'HTTP_FORWARDED', 'REMOTE_ADDR' ) as $key ) {
 		if ( array_key_exists( $key, $_SERVER ) === true ) {
 			foreach ( explode( ',', $_SERVER[$key] ) as $ip ) {
@@ -30,7 +30,7 @@ function get_ip() {
 }
 
 //check both black and white lists
-function check_lists($ip){
+function fs_cef_check_lists($ip){
 	$list = get_option('fs_bw_list');
 	if(is_array($list) and !empty($list)){
 		if (array_key_exists($ip,$list)){
@@ -40,14 +40,14 @@ function check_lists($ip){
 	return false;
 }
 
-function add_to_list($ip, $list_type){
+function fs_cef_add_to_list($ip, $list_type){
 	$list = get_option('fs_bw_list');
 	$list[$ip] = array("list_type" => $list_type, "expire" => time() + 600); //setting expiration time for 10 mins into future
 	update_option('fs_bw_list',$list);
 }
 
 //user agent string validation method:
-function check_ua(){
+function fs_cef_check_ua(){
 	$uas = $_SERVER['HTTP_USER_AGENT'];
 	if($uas){
 		if(strpos($uas, "curl") !== false){
@@ -57,36 +57,36 @@ function check_ua(){
 	return false;
 }
 
-function blacklist_and_die($ip){
-	add_to_list($ip, "black");
+function fs_cef_blacklist_and_die($ip){
+	fs_cef_add_to_list($ip, "black");
 	wp_die();
 
 }
 
 //route based on list check results; if not listed, subject to checks
-function validate() {
-	$ip = get_ip();
+function fs_cef_validate() {
+	$ip = fs_cef_get_ip();
 	if($ip == 'unknown' or is_null($ip)) {
 		return;
 	}
-	$result = check_lists($ip);	
+	$result = fs_cef_check_lists($ip);	
 	if($result == "black"){
 		wp_die();	
 	}elseif($result == "white"){
 		return;	
 	}else{ //do validations
-		if(check_ua()){
-			blacklist_and_die($ip);
+		if(fs_cef_check_ua()){
+			fs_cef_blacklist_and_die($ip);
 		}
 	}
 }
 
 function fs_receive_values($request) {
-	$ip = get_ip();
+	$ip = fs_cef_get_ip();
 	if($ip == 'unknown' or is_null($ip)) {
 		return;
 	}
-	$result = check_lists($ip);	
+	$result = fs_cef_check_lists($ip);	
 	if($result == "black"){
 		wp_die();	
 	}elseif($result == "white"){
@@ -99,14 +99,14 @@ function fs_receive_values($request) {
 			//tor check
 			if (array_key_exists("screen.height", $input_json) and array_key_exists("window.innerHeight", $input_json)){
 				if ($input_json["screen.height"] == $input_json["window.innerHeight"]){
-					blacklist_and_die($ip);
+					fs_cef_blacklist_and_die($ip);
 				}
 			}
 	
 			//Chrome incognito check
 			if (array_key_exists("storage", $input_json)){
 				if ($input_json["storage"] < 120000000){
-					blacklist_and_die($ip);
+					fs_cef_blacklist_and_die($ip);
 				}
 			}
 
@@ -114,7 +114,7 @@ function fs_receive_values($request) {
 			$ffp_key = "browser.firefox.private";
 			if (array_key_exists($ffp_key, $input_json)){
 				if ($input_json[$ffp_key] == true){
-					blacklist_and_die($ip);
+					fs_cef_blacklist_and_die($ip);
 				}
 			}
 			var_dump($input_json);
@@ -122,7 +122,7 @@ function fs_receive_values($request) {
 			//Chrome Selenium check
 			if (array_key_exists("navigator.webdriver", $input_json)){
 				if ($input_json["navigator.webdriver"] == true){
-					blacklist_and_die($ip);
+					fs_cef_blacklist_and_die($ip);
 				}
 			}
 		}
@@ -130,7 +130,7 @@ function fs_receive_values($request) {
 }
 
  
-function fs_register_floodspark_routes() {
+function fs_cef_register_floodspark_routes() {
     // register_rest_route() handles more arguments but we are going to stick to the basics for now.
     register_rest_route( 'floodspark/v1/cef', '/validate', array(
             // By using this constant we ensure that when the WP_REST_Server changes, our create endpoints will work as intended.
@@ -180,9 +180,9 @@ add_action( 'wp_enqueue_scripts', 'load_javascript' );
 add_action( 'login_enqueue_scripts', 'load_javascript');
 add_action( 'admin_enqueue_scripts', 'load_javascript');
 
-add_action( 'rest_api_init', 'fs_register_floodspark_routes' );
+add_action( 'rest_api_init', 'fs_cef_register_floodspark_routes' );
 
-add_action( 'init', 'validate' );
+add_action( 'init', 'fs_cef_validate' );
 
 register_activation_hook( __FILE__, 'activate' );
 register_deactivation_hook( __FILE__, 'deactivate' );
