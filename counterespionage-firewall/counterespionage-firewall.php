@@ -19,11 +19,11 @@ function fs_cef_get_ip() {
 			foreach ( explode( ',', $_SERVER[$key] ) as $ip ) {
 				$ip = trim( $ip );
 //comment the following filter_var code when testing locally / not on the Internet
-				if ( filter_var( $ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) !== false ) {
-					return esc_attr( $ip );
-				}
+//				if ( filter_var( $ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) !== false ) {
+//					return esc_attr( $ip );
+//				}
 //uncomment below if testing locally / not on Internet
-//				return esc_attr($ip);
+				return esc_attr($ip);
 			}
 		}
 	}
@@ -81,7 +81,7 @@ function fs_cef_validate() {
 	}
 }
 
-function fs_receive_values($request) {
+function fs_cef_receive_values($request) {
 	$ip = fs_cef_get_ip();
 	if($ip == 'unknown' or is_null($ip)) {
 		return;
@@ -136,25 +136,25 @@ function fs_cef_register_floodspark_routes() {
             // By using this constant we ensure that when the WP_REST_Server changes, our create endpoints will work as intended.
             'methods'  => WP_REST_Server::CREATABLE,
             // Here we register our callback. The callback is fired when this endpoint is matched by the WP_REST_Server class.
-            'callback' => 'fs_receive_values',
+            'callback' => 'fs_cef_receive_values',
     ) );
 }
 
-function load_javascript () {
+function fs_cef_load_javascript () {
 	wp_enqueue_script( 'fs-js', plugin_dir_url( __FILE__ ) . 'js/fs.js');
 }
 
-function activate(){
+function fs_cef_activate(){
 	add_option('fs_bw_list');
 	update_option('fs_bw_list',array());
 	register_uninstall_hook( __FILE__, 'uninstall' );
 }
 
-function deactivate(){
+function fs_cef_deactivate(){
 	delete_option('fs_bw_list');
 }
 
-function list_purge_cron_exec() {
+function fs_cef_list_purge_cron_exec() {
         $list = get_option('fs_bw_list');
         if(is_array($list) and !empty($list)){
 		foreach ($list as $ip => $meta_data){
@@ -167,7 +167,7 @@ function list_purge_cron_exec() {
         }
 }
 
-function add_cron_interval( $schedules ) {
+function fs_cef_add_cron_interval( $schedules ) {
 	$schedules['ten_minutes'] = array(
 		'interval' => 600,
 		'display'  => esc_html__( 'Every Ten Minutes' ),
@@ -176,20 +176,20 @@ function add_cron_interval( $schedules ) {
     return $schedules;
 }
 
-add_action( 'wp_enqueue_scripts', 'load_javascript' ); 
-add_action( 'login_enqueue_scripts', 'load_javascript');
-add_action( 'admin_enqueue_scripts', 'load_javascript');
+add_action( 'wp_enqueue_scripts', 'fs_cef_load_javascript' ); 
+add_action( 'login_enqueue_scripts', 'fs_cef_load_javascript');
+add_action( 'admin_enqueue_scripts', 'fs_cef_load_javascript');
 
 add_action( 'rest_api_init', 'fs_cef_register_floodspark_routes' );
 
 add_action( 'init', 'fs_cef_validate' );
 
-register_activation_hook( __FILE__, 'activate' );
-register_deactivation_hook( __FILE__, 'deactivate' );
+register_activation_hook( __FILE__, 'fs_cef_activate' );
+register_deactivation_hook( __FILE__, 'fs_cef_deactivate' );
 
-add_action( 'list_purge_cron_hook', 'list_purge_cron_exec' );
-add_filter( 'cron_schedules', 'add_cron_interval' );
-if ( ! wp_next_scheduled( 'list_purge_cron_hook' ) ) {
-	wp_schedule_event( time(), 'ten_minutes', 'list_purge_cron_hook' );
+add_action( 'fs_cef_list_purge_cron_hook', 'fs_cef_list_purge_cron_exec' );
+add_filter( 'cron_schedules', 'fs_cef_add_cron_interval' );
+if ( ! wp_next_scheduled( 'fs_cef_list_purge_cron_hook' ) ) {
+	wp_schedule_event( time(), 'ten_minutes', 'fs_cef_list_purge_cron_hook' );
 }
 ?>
