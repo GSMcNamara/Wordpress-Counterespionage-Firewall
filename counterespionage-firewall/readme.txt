@@ -57,4 +57,9 @@ An IOC indicates that a breach already took place, allowing you only to respond 
 = 1.0 =
 Initial public release
 
+== Cyber Intent Blog ==
+The [Floodspark Cyber Intent Blog](http://floodspark.com/blog/) is all about just that, cyber intent. Here we will cover the art and science of it and the developments in the Counterespionage Firewall (CEF) portfolio (CEF for WordPress and CEF Full) that turn these ideas into reality.
 
+Thank you for reading.
+
+– GS, Founder
