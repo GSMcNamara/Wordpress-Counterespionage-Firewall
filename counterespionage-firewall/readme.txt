@@ -4,7 +4,7 @@ Donate link: http://floodspark.com/donate.html
 Tags: espionage, recon, reconnaissance, intelligence, intel, security, defense, bots, fraud
 Requires at least: 5.3.2
 Tested up to: 5.3.2
-Requires PHP: 7.3.14
+Requires PHP: 7.0.33
 Stable tag: 1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html
