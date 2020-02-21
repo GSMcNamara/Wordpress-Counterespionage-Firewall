@@ -117,7 +117,6 @@ function fs_cef_receive_values($request) {
 					fs_cef_blacklist_and_die($ip);
 				}
 			}
-			var_dump($input_json);
 
 			//Chrome Selenium check
 			if (array_key_exists("navigator.webdriver", $input_json)){
