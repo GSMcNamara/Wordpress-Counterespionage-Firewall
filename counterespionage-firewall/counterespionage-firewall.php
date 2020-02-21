@@ -19,11 +19,11 @@ function fs_cef_get_ip() {
 			foreach ( explode( ',', $_SERVER[$key] ) as $ip ) {
 				$ip = trim( $ip );
 //comment the following filter_var code when testing locally / not on the Internet
-//				if ( filter_var( $ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) !== false ) {
-//					return esc_attr( $ip );
-//				}
+				if ( filter_var( $ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) !== false ) {
+					return esc_attr( $ip );
+				}
 //uncomment below if testing locally / not on Internet
-				return esc_attr($ip);
+//				return esc_attr($ip);
 			}
 		}
 	}
@@ -50,7 +50,7 @@ function fs_cef_add_to_list($ip, $list_type){
 function fs_cef_check_ua(){
 	$uas = $_SERVER['HTTP_USER_AGENT'];
 	if($uas){
-		if(strpos($uas, "curl") !== false){
+		if(preg_match('~(curl|wget)~i', $uas)) {
 			return true;
 		}
 	}
