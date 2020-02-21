@@ -1,14 +1,14 @@
 <?php
 /**
  * @package Counterespionage_Firewall
- * @version 1.0
+ * @version 1.1.0
  */
 /*
 Plugin Name: Counterespionage Firewall
 Plugin URI: http://wordpress.org/extend/plugins/counterespionage-firewall
 Description: CEF protects against reconnaissance by hackers and otherwise illegitimate traffic such as bots and scrapers. Increase performance, reduce fraud, thwart attacks, and serve your real customers. Note: WP-Cron needs to be enabled or the black and whitelist may grow indefinitely.
 Author: Floodspark
-Version: 1.0
+Version: 1.1.0
 Author URI: http://floodspark.com
 */
 
