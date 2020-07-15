@@ -4,11 +4,12 @@ The CEF-WP plugin is free and open source. So far it can detect and block:
 
 - Tor browser, with minor delay
 - Chrome Incognito, with minor delay, over HTTPS
-- Firefox Private Browsing
-- Chrome-Selenium in its default configuration
+- Firefox Private Browsing, with minor delay
+- Chrome-Selenium in its default configuration, with minor delay
 - cURL in its default configuration
+- Wget in its default configuration
 
-Look for it soon in the official Wordpress plugin repo. It's undergoing review.
+[Install the plugin](https://wordpress.org/plugins/counterespionage-firewall/)
 
 The [Cyber Intent Blog](http://floodspark.com/blog/) is a living demonstration of the plugin hosted intentionally on cheap, shared hosting to prove that it works in even the most resource constrained environment.
 
