@@ -11,7 +11,7 @@ The CEF-WP plugin is free and open source. So far it can detect and block:
 - Inappropriate HTTP methods
 - Proxy probing
 
-[Install the plugin](https://wordpress.org/plugins/counterespionage-firewall/)
+## [Install the plugin here](https://wordpress.org/plugins/counterespionage-firewall/)
 
 The [Cyber Intent Blog](http://floodspark.com/blog/) is a living demonstration of the plugin hosted intentionally on cheap, shared hosting to prove that it works in even the most resource constrained environment.
 
