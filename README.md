@@ -13,7 +13,7 @@ The CEF-WP plugin is free and open source. So far it can detect and block:
 
 ## [Install the plugin here](https://wordpress.org/plugins/counterespionage-firewall/)
 
-The [Cyber Intent Blog](http://floodspark.com/blog/) is a living demonstration of the plugin hosted intentionally on cheap, shared hosting to prove that it works in even the most resource constrained environment.
+Our [Cyber Intent Blog](http://floodspark.com/blog/) is a living demonstration of the plugin hosted intentionally on cheap, shared hosting to prove that it works in even the most resource constrained environment.
 
 [Floodspark Counterespionage Firewall (CEF) – full version](https://github.com/GSMcNamara/Floodspark) has additional capabilities.  
 [More info and FAQs](http://floodspark.com/)  
