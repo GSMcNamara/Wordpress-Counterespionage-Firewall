@@ -54,6 +54,9 @@ function fs_cef_check_ua(){
 			return true;
 		}
 	}
+	if ($uas == ''){
+		return true;
+	}
 	return false;
 }
 
