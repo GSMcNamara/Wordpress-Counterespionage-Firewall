@@ -29,6 +29,10 @@ function fs_cef_get_ip() {
 	}
 }
 
+function fs_die (){
+	wp_die($message = 'Please revisit in ten minutes with a valid browser. This site is protected by Floodspark.', $title = 'Protected by Floodspark', $args = ($response = 403));
+}
+
 //check both black and white lists
 function fs_cef_check_lists($ip){
 	$list = get_option('fs_bw_list');
@@ -72,7 +76,7 @@ function fs_cef_check_request_method(){
 
 function fs_cef_blacklist_and_die($ip){
 	fs_cef_add_to_list($ip, "black");
-	wp_die();
+	fs_die();
 }
 
 //route based on list check results; if not listed, subject to checks
@@ -83,7 +87,7 @@ function fs_cef_validate() {
 	}
 	$result = fs_cef_check_lists($ip);	
 	if($result == "black"){
-		wp_die();	
+		fs_die();	
 	}elseif($result == "white"){
 		return;	
 	}else{ //do validations
@@ -103,7 +107,7 @@ function fs_cef_receive_values($request) {
 	}
 	$result = fs_cef_check_lists($ip);	
 	if($result == "black"){
-		wp_die();	
+		fs_die();	
 	}elseif($result == "white"){
 		return;	
 	}else{ //do validations
