@@ -30,7 +30,7 @@ function fs_cef_get_ip() {
 }
 
 function fs_die (){
-	wp_die($message = 'Please revisit in ten minutes with a valid browser. This site is protected by Floodspark.', $title = 'Protected by Floodspark', $args = ($response = 403));
+	wp_die($message = 'Unauthorized device or behavior. Please revisit in ten minutes with a valid browser.', $title = 'Unauthorized', $args = ($response = 403));
 }
 
 //check both black and white lists
