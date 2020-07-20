@@ -1,10 +1,11 @@
 === Counterespionage Firewall ===
 Contributors: floodspark
+Donate link: http://floodspark.com/donate.html
 Tags: espionage, recon, reconnaissance, intelligence, intel, security, defense, bots, fraud
 Requires at least: 5.3.2
 Tested up to: 5.4.2
 Requires PHP: 7.0.33
-Stable tag: 1.0
+Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html
 
@@ -14,7 +15,7 @@ The Floodspark Counterespionage Firewall (CEF) WordPress plugin helps you block 
 
 Floodspark Counterespionage Firewall (CEF) helps you block reconnaissance or otherwise illegitimate traffic. CEF is like a web application firewall (WAF) but protects against reconnaissance. CEF focuses on pre-attack protection and is designed to complement security plugins such as Wordfence or Sucuri.
 
-Using Intent Indicators, CEF can detect and protect earlier than an Indicators of Compromise (IoCs) or IP blacklist-based solution. Increase performance, reduce fraud, thwart attacks, and serve your real customers.
+Using Intent Indicators, CEF can detect and protect earlier than an Indicators of Compromise (IoCs) or IP blacklist-based solution. Our goal is to help you increase performance, reduce fraud, thwart attacks, and serve your real customers.
 
 So far CEF for WordPress can detect and block:
 * Tor browser, with minor delay
@@ -25,6 +26,10 @@ So far CEF for WordPress can detect and block:
 * Wget in its default configuration
 * HTTP methods other than GET, POST, and HEAD
 * Proxy probing
+
+Feedback is greatly appreciated as we continue to shape Floodspark and expand what it can do. Email us anytime - gs@floodspark.com. 
+
+Stay up to date with developments in the Floodspark portfolio: http://floodspark.com/uptodate.html
 
 == Frequently Asked Questions ==
 
@@ -55,14 +60,26 @@ BLUF: An Intent Indicator is earlier than an IoC. You can see why this is benefi
 An IOC indicates that a breach already took place, allowing you only to respond after the fact. Intent Indicators are the attacker’s traits, or Tactics, Techniques, and Procedures (TTPs), observable during the recon phase--traits, that with high confidence, would not belong to legitimate visitor traffic and behavior.
 
 == Changelog ==
- 
+
+= 1.1.0 =
+* Permitted HTTP methods safelisting
+* Block proxy probes
+* Blocked message appears for bad visitors
+* General fixes
+
 = 1.0 =
 * Initial public release
 
 == Upgrade Notice ==
+
+= 1.1.0 = 
+Additional detections are included in this release. Also a message will appear for blocked users.
  
 = 1.0 =
 Initial public release
+
+== Screenshots ==
+1. Error message the visitor will receive for banned behavior or devices.
 
 == Cyber Intent Blog ==
 The [Floodspark Cyber Intent Blog](http://floodspark.com/blog/) uses this plugin and is all about just that, cyber intent. Here we will cover the art and science of it and the developments in the Counterespionage Firewall (CEF) portfolio (CEF for WordPress and CEF Full) that turn these ideas into reality.
