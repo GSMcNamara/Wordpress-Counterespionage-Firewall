@@ -8,7 +8,7 @@ The CEF-WP plugin is free and open source. So far it can detect and block:
 - Chrome-Selenium in its default configuration, with minor delay
 - cURL in its default configuration
 - Wget in its default configuration
-- Inappropriate HTTP methods
+- HTTP methods other than GET, POST, and HEAD
 - Proxy probing
 
 ## [Install the plugin here](https://wordpress.org/plugins/counterespionage-firewall/)
