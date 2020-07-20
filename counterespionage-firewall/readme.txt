@@ -29,7 +29,7 @@ So far CEF for WordPress can detect and block:
 
 Feedback is greatly appreciated as we continue to shape Floodspark and expand what it can do. Email us anytime - gs@floodspark.com. 
 
-Stay up to date with developments in the Floodspark portfolio: http://floodspark.com/uptodate.html
+Stay up to date with developments in the Floodspark portfolio: [http://floodspark.com/uptodate.html](http://floodspark.com/uptodate.html)
 
 == Frequently Asked Questions ==
 
