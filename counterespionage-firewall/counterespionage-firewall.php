@@ -203,7 +203,6 @@ function fs_filter_wp_headers( $headers ) {
 	}
 	$headers['X-Powered-By'] = 'PHP/7.4.8';
 
-
     return $headers;
 }
 
