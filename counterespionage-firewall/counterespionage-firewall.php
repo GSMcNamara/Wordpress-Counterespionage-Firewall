@@ -194,6 +194,19 @@ function fs_cef_add_cron_interval( $schedules ) {
     return $schedules;
 }
 
+function fs_filter_wp_headers( $headers ) {
+	//here we replace the PHP header with the most current version
+	if (function_exists('header_remove')) {
+	    header_remove('X-Powered-By'); // PHP 5.3+
+	} else {
+	    @ini_set('expose_php', 'off');
+	}
+	$headers['X-Powered-By'] = 'PHP/7.4.8';
+
+
+    return $headers;
+}
+
 add_action( 'wp_enqueue_scripts', 'fs_cef_load_javascript' ); 
 add_action( 'login_enqueue_scripts', 'fs_cef_load_javascript');
 add_action( 'admin_enqueue_scripts', 'fs_cef_load_javascript');
@@ -210,4 +223,7 @@ add_filter( 'cron_schedules', 'fs_cef_add_cron_interval' );
 if ( ! wp_next_scheduled( 'fs_cef_list_purge_cron_hook' ) ) {
 	wp_schedule_event( time(), 'ten_minutes', 'fs_cef_list_purge_cron_hook' );
 }
+
+add_filter( 'wp_headers', 'fs_filter_wp_headers' );
+
 ?>
