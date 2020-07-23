@@ -5,7 +5,7 @@ Tags: espionage, recon, reconnaissance, intelligence, intel, security, defense, 
 Requires at least: 5.3.2
 Tested up to: 5.4.2
 Requires PHP: 7.0.33
-Stable tag: 1.2.0
+Stable tag: 1.3.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html
 
@@ -64,6 +64,9 @@ An IOC indicates that a breach already took place, allowing you only to respond 
 
 == Changelog ==
 
+= 1.3.0 =
+* Fakes most current version of PHP
+
 = 1.2.0 =
 * Permitted HTTP methods safelisting
 * Block proxy probes
@@ -78,6 +81,9 @@ An IOC indicates that a breach already took place, allowing you only to respond 
 * Initial public release
 
 == Upgrade Notice ==
+
+= 1.3.0 = 
+CEF now fakes the most current version of PHP to throw off attacker intelligence gathering.
 
 = 1.2.0 = 
 Additional detections are included in this release. Also a message will appear for blocked users.
