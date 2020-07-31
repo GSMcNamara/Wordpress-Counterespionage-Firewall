@@ -206,6 +206,28 @@ function fs_filter_wp_headers( $headers ) {
     return $headers;
 }
 
+function mask_username_rest_prepare_user( WP_REST_Response $response, WP_User $user, WP_REST_Request $request ){
+
+    $data = $response->get_data();
+
+    $original_slug = $data['slug']; 
+    $new_slug = "JIMMYBOY";
+    $data['slug'] = $new_slug;
+    $original_link = $data['link'];
+    #https://stackoverflow.com/a/7791665
+    $new_link = preg_replace('~' . $original_slug . '(?!.*' . $original_slug . ')~', $new_slug, $original_link);
+    $data['link'] = $new_link;
+
+    #check if the user's name is also the same as their slug. If so, also mask that.
+    if ($data['name'] == $original_slug) {
+    	$data['name'] = $new_slug;
+    }
+
+    $response->set_data( $data );
+
+    return $response;
+}
+
 add_action( 'wp_enqueue_scripts', 'fs_cef_load_javascript' ); 
 add_action( 'login_enqueue_scripts', 'fs_cef_load_javascript');
 add_action( 'admin_enqueue_scripts', 'fs_cef_load_javascript');
@@ -223,6 +245,8 @@ if ( ! wp_next_scheduled( 'fs_cef_list_purge_cron_hook' ) ) {
 	wp_schedule_event( time(), 'ten_minutes', 'fs_cef_list_purge_cron_hook' );
 }
 
+
+add_filter( 'rest_prepare_user', 'mask_username_rest_prepare_user', 10, 3 );
 add_filter( 'wp_headers', 'fs_filter_wp_headers' );
 
 ?>
