@@ -173,7 +173,7 @@ function fs_cef_activate(){
     $users = get_users();
 
     foreach($users as $user) {
-    	$username_aliases[$user->ID] = ['username_alias' => generate_username_alias()];
+    	$username_aliases[$user->ID] = ['username_alias' => fs_generate_username_alias()];
 	}
 	update_option('fs_username_aliases',$username_aliases);
 
@@ -219,11 +219,11 @@ function fs_filter_wp_headers( $headers ) {
     return $headers;
 }
 
-function generate_username_alias(){
+function fs_generate_username_alias(){
 	return substr(str_shuffle('0123456789abcdefghijklmnopqrstuvwxyz'), 0, 8);
 }
 
-function mask_username_rest_prepare_user( WP_REST_Response $response, WP_User $user, WP_REST_Request $request ){
+function fs_mask_username_rest_prepare_user( WP_REST_Response $response, WP_User $user, WP_REST_Request $request ){
 
     $data = $response->get_data();
 
@@ -240,13 +240,13 @@ function mask_username_rest_prepare_user( WP_REST_Response $response, WP_User $u
 			#something went wrong and set a default value for username_aliases for this iteration
 			# or the probe was for a non-existent user
 			# or parity was not maintained between alias list and real users, and the user ID does exist but not in our alias list (yet)
-			$username_alias = generate_username_alias();
+			$username_alias = fs_generate_username_alias();
 		}
 	}else { #TODO: should probably do a try-except here instead
 			#something went wrong and set a default value for username_aliases for this iteration
 			# or the probe was for a non-existent user
 			# or parity was not maintained between alias list and real users, and the user ID does exist but not in our alias list (yet)
-			$username_alias = generate_username_alias();
+			$username_alias = fs_generate_username_alias();
 	}
 
     $new_slug = $username_alias;
@@ -284,7 +284,8 @@ if ( ! wp_next_scheduled( 'fs_cef_list_purge_cron_hook' ) ) {
 }
 
 
-add_filter( 'rest_prepare_user', 'mask_username_rest_prepare_user', 10, 3 );
+add_filter( 'rest_prepare_user', 'fs_mask_username_rest_prepare_user', 10, 3 );
 add_filter( 'wp_headers', 'fs_filter_wp_headers' );
+
 
 ?>
