@@ -165,11 +165,16 @@ function fs_cef_load_javascript () {
 function fs_cef_activate(){
 	add_option('fs_bw_list');
 	update_option('fs_bw_list',array());
+
+	add_option('fs_username_aliases');
+	update_option('fs_username_aliases',array());
+
 	register_uninstall_hook( __FILE__, 'uninstall' );
 }
 
 function fs_cef_deactivate(){
 	delete_option('fs_bw_list');
+	delete_option('fs_username_aliases');
 }
 
 function fs_cef_list_purge_cron_exec() {
@@ -210,8 +215,29 @@ function mask_username_rest_prepare_user( WP_REST_Response $response, WP_User $u
 
     $data = $response->get_data();
 
+    #here need to check if a logged in user. If so, exist w/o masking.
+
     $original_slug = $data['slug']; 
-    $new_slug = "JIMMYBOY";
+
+    $username_aliases = get_option('fs_username_aliases');
+
+    if(is_array($username_aliases) and !empty($username_aliases)){
+		if (array_key_exists($data['id'],$username_aliases) and array_key_exists($username_aliases[$data['id']]["alias_username"], $username_aliases[$data['id']])){
+			$alias_username = $username_aliases[$data['id']]["alias_username"];
+		} else { 
+			#something went wrong and set a default value for username_aliases for this iteration
+			# or the probe was for a non-existent user
+			# or parity was not maintained between alias list and real users, and the user ID does exist but not in our alias list (yet)
+			$alias_username = substr(str_shuffle('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'), 0, 8);
+		}
+	}else { #TODO: should probably do a try-except here instead
+			#something went wrong and set a default value for username_aliases for this iteration
+			# or the probe was for a non-existent user
+			# or parity was not maintained between alias list and real users, and the user ID does exist but not in our alias list (yet)
+			$alias_username = substr(str_shuffle('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'), 0, 8);
+	}
+
+    $new_slug = $alias_username;
     $data['slug'] = $new_slug;
     $original_link = $data['link'];
     #https://stackoverflow.com/a/7791665
