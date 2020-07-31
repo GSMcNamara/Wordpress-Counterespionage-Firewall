@@ -228,13 +228,13 @@ function mask_username_rest_prepare_user( WP_REST_Response $response, WP_User $u
 			#something went wrong and set a default value for username_aliases for this iteration
 			# or the probe was for a non-existent user
 			# or parity was not maintained between alias list and real users, and the user ID does exist but not in our alias list (yet)
-			$alias_username = substr(str_shuffle('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'), 0, 8);
+			$alias_username = substr(str_shuffle('0123456789abcdefghijklmnopqrstuvwxyz'), 0, 8);
 		}
 	}else { #TODO: should probably do a try-except here instead
 			#something went wrong and set a default value for username_aliases for this iteration
 			# or the probe was for a non-existent user
 			# or parity was not maintained between alias list and real users, and the user ID does exist but not in our alias list (yet)
-			$alias_username = substr(str_shuffle('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'), 0, 8);
+			$alias_username = substr(str_shuffle('0123456789abcdefghijklmnopqrstuvwxyz'), 0, 8);
 	}
 
     $new_slug = $alias_username;
