@@ -266,6 +266,30 @@ function fs_mask_username_rest_prepare_user( WP_REST_Response $response, WP_User
     return $response;
 }
 
+# https://wordpress.stackexchange.com/a/90516
+function fs_get_user_id_by_display_name( $display_name ) {
+    global $wpdb;
+
+    if ( ! $user = $wpdb->get_row( $wpdb->prepare(
+        "SELECT `ID` FROM $wpdb->users WHERE `display_name` = %s", $display_name
+    ) ) )
+        return false;
+
+    return $user->ID;
+}
+
+function fs_filter_the_author( $display_name ) {
+
+    // $display_name === string $authordata->display_name
+
+	$author_id = fs_get_user_id_by_display_name($display_name);
+	$author_id = intval($author_id);
+	$username_aliases = get_option('fs_username_aliases');
+	$username_alias = $username_aliases[$author_id]["username_alias"];
+
+    return $username_alias;
+}
+
 add_action( 'wp_enqueue_scripts', 'fs_cef_load_javascript' ); 
 add_action( 'login_enqueue_scripts', 'fs_cef_load_javascript');
 add_action( 'admin_enqueue_scripts', 'fs_cef_load_javascript');
@@ -287,5 +311,6 @@ if ( ! wp_next_scheduled( 'fs_cef_list_purge_cron_hook' ) ) {
 add_filter( 'rest_prepare_user', 'fs_mask_username_rest_prepare_user', 10, 3 );
 add_filter( 'wp_headers', 'fs_filter_wp_headers' );
 
+add_filter( 'the_author', 'fs_filter_the_author', 10, 1 );
 
 ?>
