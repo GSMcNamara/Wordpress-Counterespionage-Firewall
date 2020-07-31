@@ -167,7 +167,15 @@ function fs_cef_activate(){
 	update_option('fs_bw_list',array());
 
 	add_option('fs_username_aliases');
-	update_option('fs_username_aliases',array());
+	#generate aliases here, and pad by a few more
+	#TODO: figure out how to intercept 404 response to JSON API for non-existent user
+	$username_aliases = array();
+    $users = get_users();
+
+    foreach($users as $user) {
+    	$username_aliases[$user->ID] = ['username_alias' => generate_username_alias()];
+	}
+	update_option('fs_username_aliases',$username_aliases);
 
 	register_uninstall_hook( __FILE__, 'uninstall' );
 }
@@ -211,6 +219,10 @@ function fs_filter_wp_headers( $headers ) {
     return $headers;
 }
 
+function generate_username_alias(){
+	return substr(str_shuffle('0123456789abcdefghijklmnopqrstuvwxyz'), 0, 8);
+}
+
 function mask_username_rest_prepare_user( WP_REST_Response $response, WP_User $user, WP_REST_Request $request ){
 
     $data = $response->get_data();
@@ -222,22 +234,22 @@ function mask_username_rest_prepare_user( WP_REST_Response $response, WP_User $u
     $username_aliases = get_option('fs_username_aliases');
 
     if(is_array($username_aliases) and !empty($username_aliases)){
-		if (array_key_exists($data['id'],$username_aliases) and array_key_exists($username_aliases[$data['id']]["alias_username"], $username_aliases[$data['id']])){
-			$alias_username = $username_aliases[$data['id']]["alias_username"];
+		if (array_key_exists($data['id'],$username_aliases) and array_key_exists("username_alias", $username_aliases[$data['id']])){
+			$username_alias = $username_aliases[$data['id']]["username_alias"];
 		} else { 
 			#something went wrong and set a default value for username_aliases for this iteration
 			# or the probe was for a non-existent user
 			# or parity was not maintained between alias list and real users, and the user ID does exist but not in our alias list (yet)
-			$alias_username = substr(str_shuffle('0123456789abcdefghijklmnopqrstuvwxyz'), 0, 8);
+			$username_alias = generate_username_alias();
 		}
 	}else { #TODO: should probably do a try-except here instead
 			#something went wrong and set a default value for username_aliases for this iteration
 			# or the probe was for a non-existent user
 			# or parity was not maintained between alias list and real users, and the user ID does exist but not in our alias list (yet)
-			$alias_username = substr(str_shuffle('0123456789abcdefghijklmnopqrstuvwxyz'), 0, 8);
+			$username_alias = generate_username_alias();
 	}
 
-    $new_slug = $alias_username;
+    $new_slug = $username_alias;
     $data['slug'] = $new_slug;
     $original_link = $data['link'];
     #https://stackoverflow.com/a/7791665
