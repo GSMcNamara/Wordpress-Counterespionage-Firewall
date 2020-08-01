@@ -296,7 +296,7 @@ function fs_filter_the_author( $display_name ) {
 
 
 function fs_filter_wp_redirect( $location, $status ) { 
-    if ($status == 301){
+    if ($status == 301 && !is_user_logged_in()){
 	    if(preg_match('/\/author\//', $location)){ #then likely it's a response to a /?author=x request"
 	    	$url_split_position = strpos($location, '/author/');
 	    	$url_part_1 = substr($location, 0, $url_split_position + 8);
