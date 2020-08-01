@@ -313,6 +313,25 @@ function fs_filter_wp_redirect( $location, $status ) {
     return $location; 
 }
 
+function fs_filter_author_link($link){
+	if (!is_user_logged_in()){
+		$url_split_position = strpos($link, '/author/');
+		$url_part_1 = substr($link, 0, $url_split_position + 8);
+		$username = substr($link, $url_split_position + 8);
+		$username = rtrim($username, '/');
+		$user_id = get_user_by('login',$username);
+		$user_id = $user_id->ID;
+		$username_aliases = get_option('fs_username_aliases');
+		$username_alias = $username_aliases[$user_id]["username_alias"];
+
+		$link = $url_part_1 . $username_alias . "/";
+	}
+	return $link;
+}
+
+
+add_filter( 'author_link', 'fs_filter_author_link' );
+
 add_filter( 'wp_redirect', 'fs_filter_wp_redirect', 10, 2 ); 
 
 add_action( 'wp_enqueue_scripts', 'fs_cef_load_javascript' ); 
