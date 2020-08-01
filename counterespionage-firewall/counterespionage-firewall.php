@@ -282,12 +282,16 @@ function fs_filter_the_author( $display_name ) {
 
     // $display_name === string $authordata->display_name
 
-	$author_id = fs_get_user_id_by_display_name($display_name);
-	$author_id = intval($author_id);
-	$username_aliases = get_option('fs_username_aliases');
-	$username_alias = $username_aliases[$author_id]["username_alias"];
+	if (!is_user_logged_in()){
+		$author_id = fs_get_user_id_by_display_name($display_name);
+		$author_id = intval($author_id);
+		$username_aliases = get_option('fs_username_aliases');
+		$username_alias = $username_aliases[$author_id]["username_alias"];
 
-    return $username_alias;
+	    return $username_alias;
+	}else{
+		return $display_name;
+	}
 }
 
 
