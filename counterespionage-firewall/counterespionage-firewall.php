@@ -358,14 +358,17 @@ function fs_proxy_author_url( $query ) {
 function remove_author_from_css_body_class( $wp_classes, $extra_classes ) {
 	if (is_author()){ //check if current page is an author page, 
 					  //so we're not doing check below on all pages (performance)
-		$user_id = $_GET['author'];
-		if (filter_var($user_id, FILTER_VALIDATE_INT)) {
-	   		$user_nicename = get_userdata(intval($user_id))->user_nicename;
-	   		$array_key_id = array_search('author-' . $user_nicename, $wp_classes);
-	   		if ( $array_key_id ) { #user exists
-				$username_aliases = get_option('fs_username_aliases');
-				$username_alias = $username_aliases[$array_key_id];
-				$wp_classes[$array_key_id] = 'author-' . $username_alias;
+		$user_id = $_GET['author']; 
+		if ($user_id){ // then this is a request to /?author=x that did not redirect to 
+					   // /author/username for whatever reason
+			if (filter_var($user_id, FILTER_VALIDATE_INT)) {
+		   		$user_nicename = get_userdata(intval($user_id))->user_nicename;
+		   		$array_key_id = array_search('author-' . $user_nicename, $wp_classes);
+		   		if ( $array_key_id ) { #user exists
+					$username_aliases = get_option('fs_username_aliases');
+					$username_alias = $username_aliases[$array_key_id];
+					$wp_classes[$array_key_id] = 'author-' . $username_alias;
+				}
 			}
 		}
     }
