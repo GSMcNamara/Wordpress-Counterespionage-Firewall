@@ -167,13 +167,12 @@ function fs_cef_activate(){
 	update_option('fs_bw_list',array());
 
 	add_option('fs_username_aliases');
-	#generate aliases here, and pad by a few more
-	#TODO: figure out how to intercept 404 response to JSON API for non-existent user
+
 	$username_aliases = array();
     $users = get_users();
 
     foreach($users as $user) {
-    	$username_aliases[$user->ID] = ['username_alias' => fs_generate_username_alias()];
+    	$username_aliases[$user->ID] = fs_generate_username_alias();
 	}
 	update_option('fs_username_aliases',$username_aliases);
 
@@ -220,22 +219,20 @@ function fs_filter_wp_headers( $headers ) {
 }
 
 function fs_generate_username_alias(){
-	return substr(str_shuffle('0123456789abcdefghijklmnopqrstuvwxyz'), 0, 8);
+	return substr(str_shuffle('0123456789abcdefghijklmnopqrstuvwxyz'), 0, rand(8,11));
 }
 
 function fs_mask_username_rest_prepare_user( WP_REST_Response $response, WP_User $user, WP_REST_Request $request ){
 
     $data = $response->get_data();
 
-    #here need to check if a logged in user. If so, exist w/o masking.
-
     $original_slug = $data['slug']; 
 
     $username_aliases = get_option('fs_username_aliases');
 
     if(is_array($username_aliases) and !empty($username_aliases)){
-		if (array_key_exists($data['id'],$username_aliases) and array_key_exists("username_alias", $username_aliases[$data['id']])){
-			$username_alias = $username_aliases[$data['id']]["username_alias"];
+		if (array_key_exists($data['id'],$username_aliases) and array_key_exists($data['id'], $username_aliases)){
+			$username_alias = $username_aliases[$data['id']];
 		} else { 
 			#something went wrong and set a default value for username_aliases for this iteration
 			# or the probe was for a non-existent user
@@ -286,7 +283,7 @@ function fs_filter_the_author( $display_name ) {
 		$author_id = fs_get_user_id_by_display_name($display_name);
 		$author_id = intval($author_id);
 		$username_aliases = get_option('fs_username_aliases');
-		$username_alias = $username_aliases[$author_id]["username_alias"];
+		$username_alias = $username_aliases[$author_id];
 
 	    return $username_alias;
 	}else{
@@ -305,7 +302,7 @@ function fs_filter_wp_redirect( $location, $status ) {
 	    	$user_id = get_user_by('login',$username);
 	    	$user_id = $user_id->ID;
 			$username_aliases = get_option('fs_username_aliases');
-			$username_alias = $username_aliases[$user_id]["username_alias"];
+			$username_alias = $username_aliases[$user_id];
 
 			$location = $url_part_1 . $username_alias . "/";
 	    }
@@ -322,13 +319,62 @@ function fs_filter_author_link($link){
 		$user_id = get_user_by('login',$username);
 		$user_id = $user_id->ID;
 		$username_aliases = get_option('fs_username_aliases');
-		$username_alias = $username_aliases[$user_id]["username_alias"];
+		$username_alias = $username_aliases[$user_id];
 
 		$link = $url_part_1 . $username_alias . "/";
 	}
 	return $link;
 }
 
+// for incoming requests to an author's page (e.g. /author/fakejim/), 
+// proxy it to /author/jim/ under the hood
+function fs_proxy_author_url( $query ) {
+	$url = $_SERVER['REQUEST_URI'];
+	if(preg_match('/\/author\//', $url)){ #then likely a request to author page/link
+		$requested_author = $query->query_vars['author_name'];
+		
+		//here we check to see if this is a request for the real username
+		//if so, don't divulge its existence and instead return 404
+		if(username_exists( $requested_author )){
+			status_header( 404 );
+			nocache_headers();
+			include( get_query_template( '404' ) );
+			die();	
+		}
+
+		$username_aliases = get_option('fs_username_aliases');
+		$username_alias_id = array_search($requested_author, $username_aliases);
+		$real_user_object = get_user_by('id',$username_alias_id);
+		if(!empty($real_user_object)){
+			$real_username = $real_user_object->data->user_login;
+			$query->query_vars['author_name'] = $real_username;
+			return $query;
+		}
+	}
+}
+
+// WordPress embeds author-specific classes in the <body> tag of author pages 
+// and one divulges the user_nicename. Here we swap in the username alias for that class.
+function remove_author_from_css_body_class( $wp_classes, $extra_classes ) {
+	if (is_author()){ //check if current page is an author page, 
+					  //so we're not doing check below on all pages (performance)
+		$user_id = $_GET['author'];
+		if (filter_var($user_id, FILTER_VALIDATE_INT)) {
+	   		$user_nicename = get_userdata(intval($user_id))->user_nicename;
+	   		$array_key_id = array_search('author-' . $user_nicename, $wp_classes);
+	   		if ( $array_key_id ) { #user exists
+				$username_aliases = get_option('fs_username_aliases');
+				$username_alias = $username_aliases[$array_key_id];
+				$wp_classes[$array_key_id] = 'author-' . $username_alias;
+			}
+		}
+    }
+    return $wp_classes;
+}
+
+add_filter( 'body_class', 'remove_author_from_css_body_class', 10, 2 );
+
+add_action( 'parse_request', 'fs_proxy_author_url' );
 
 add_filter( 'author_link', 'fs_filter_author_link' );
 
