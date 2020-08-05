@@ -63,9 +63,13 @@ BLUF: An Intent Indicator is earlier than an IoC. You can see why this is benefi
 An IOC indicates that a breach already took place, allowing you only to respond after the fact. Intent Indicators are the attacker’s traits, or Tactics, Techniques, and Procedures (TTPs), observable during the recon phase--traits, that with high confidence, would not belong to legitimate visitor traffic and behavior.
 
 == Screenshots ==
-1. Error message the visitor will receive for banned behavior or devices.
+1. Faking WPScan's username hunting. Real usernames were "admin", "admin2", and "admin3". No hacker can log in with these faked usernames.
+2. Error message the visitor will receive for banned behavior or devices.
 
 == Changelog ==
+
+= 1.4.0 =
+* CEF now disrupts hacker attempts at username enumeration
 
 = 1.3.0 =
 * Fakes most current version of PHP
@@ -84,6 +88,9 @@ An IOC indicates that a breach already took place, allowing you only to respond 
 * Initial public release
 
 == Upgrade Notice ==
+
+= 1.4.0 =
+CEF now hides your real usernames from hackers. [Read about this unique approach on our blog](https://floodspark.com/blog/information-warfare-vs-security-through-obscurity/)
 
 = 1.3.0 = 
 CEF now fakes the most current version of PHP to throw off attacker intelligence gathering.
