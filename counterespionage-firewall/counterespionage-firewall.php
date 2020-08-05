@@ -291,6 +291,12 @@ function fs_filter_the_author( $display_name ) {
 	}
 }
 
+function fs_get_username_from_author_link ($url){
+	$url_split_position = strpos($url, '/author/');
+	$username = substr($url, $url_split_position + 8);
+	$username = rtrim($username, '/');
+	return $username;
+}
 
 function fs_filter_wp_redirect( $location, $status ) { 
     if ($status == 301 && !is_user_logged_in()){
@@ -299,12 +305,12 @@ function fs_filter_wp_redirect( $location, $status ) {
 	    	$url_part_1 = substr($location, 0, $url_split_position + 8);
 	    	$username = substr($location, $url_split_position + 8);
 	    	$username = rtrim($username, '/');
-	    	$user_id = get_user_by('login',$username);
-	    	$user_id = $user_id->ID;
-			$username_aliases = get_option('fs_username_aliases');
-			$username_alias = $username_aliases[$user_id];
-
-			$location = $url_part_1 . $username_alias . "/";
+	    	if ($user_id = get_user_by('login',$username)){ #if this check fails, the URL has likely already been through fs_filter_author_link()
+		    	$user_id = $user_id->ID;
+				$username_aliases = get_option('fs_username_aliases');
+				$username_alias = $username_aliases[$user_id];
+				$location = $url_part_1 . $username_alias . "/";
+			}
 	    }
 	}
     return $location; 
@@ -316,19 +322,20 @@ function fs_filter_author_link($link){
 		$url_part_1 = substr($link, 0, $url_split_position + 8);
 		$username = substr($link, $url_split_position + 8);
 		$username = rtrim($username, '/');
-		$user_id = get_user_by('login',$username);
-		$user_id = $user_id->ID;
-		$username_aliases = get_option('fs_username_aliases');
-		$username_alias = $username_aliases[$user_id];
-
-		$link = $url_part_1 . $username_alias . "/";
+		if (!array_search($username, get_option('fs_username_aliases'))){ //checking if this author url already had username alias swapped in
+			$user_id = get_user_by('login',$username);
+			$user_id = $user_id->ID;
+			$username_aliases = get_option('fs_username_aliases');
+			$username_alias = $username_aliases[$user_id];
+			$link = $url_part_1 . $username_alias . "/";
+		}
 	}
 	return $link;
 }
 
 // for incoming requests to an author's page (e.g. /author/fakejim/), 
 // proxy it to /author/jim/ under the hood
-function fs_proxy_author_url( $query ) {
+function fs_proxy_the_author_url( $query ) {
 	$url = $_SERVER['REQUEST_URI'];
 	if(preg_match('/\/author\//', $url)){ #then likely a request to author page/link
 		$requested_author = $query->query_vars['author_name'];
@@ -340,15 +347,15 @@ function fs_proxy_author_url( $query ) {
 			nocache_headers();
 			include( get_query_template( '404' ) );
 			die();	
-		}
-
-		$username_aliases = get_option('fs_username_aliases');
-		$username_alias_id = array_search($requested_author, $username_aliases);
-		$real_user_object = get_user_by('id',$username_alias_id);
-		if(!empty($real_user_object)){
-			$real_username = $real_user_object->data->user_login;
-			$query->query_vars['author_name'] = $real_username;
-			return $query;
+		}else{
+			$username_aliases = get_option('fs_username_aliases');
+			$username_alias_id = array_search($requested_author, $username_aliases);
+			$real_user_object = get_user_by('id',$username_alias_id);
+			if(!empty($real_user_object)){
+				$real_username = $real_user_object->data->user_login;
+				$query->query_vars['author_name'] = $real_username;
+				return $query;
+			}
 		}
 	}
 }
@@ -370,6 +377,13 @@ function remove_author_from_css_body_class( $wp_classes, $extra_classes ) {
 					$wp_classes[$array_key_id] = 'author-' . $username_alias;
 				}
 			}
+		}else{
+			$username_alias = fs_get_username_from_author_link($_SERVER['REQUEST_URI']);
+			$username_aliases = get_option('fs_username_aliases');
+			$username_alias_id = array_search($username_alias, $username_aliases);
+			$user_nicename = get_userdata($username_alias_id)->user_nicename;
+			$array_key_id = array_search('author-' . $user_nicename, $wp_classes);
+			$wp_classes[$array_key_id] = 'author-' . $username_alias;
 		}
     }
     return $wp_classes;
@@ -377,7 +391,7 @@ function remove_author_from_css_body_class( $wp_classes, $extra_classes ) {
 
 add_filter( 'body_class', 'remove_author_from_css_body_class', 10, 2 );
 
-add_action( 'parse_request', 'fs_proxy_author_url' );
+add_action( 'parse_request', 'fs_proxy_the_author_url' );
 
 add_filter( 'author_link', 'fs_filter_author_link' );
 
