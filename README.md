@@ -1,6 +1,9 @@
 # Floodspark Counterespionage Firewall plugin for WordPress
 
-The CEF-WP plugin is free and open source. So far it can detect and block:
+The CEF-WP plugin is free and open source. So far it can:
+- Fake out WPScan and bots by hiding your real usernames, instead supplying them with fake ones they will never be able to log in with.
+
+...and detect and block:
 
 - Tor browser, with minor delay
 - Chrome Incognito, with minor delay, over HTTPS
