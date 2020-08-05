@@ -3,7 +3,7 @@
 The CEF-WP plugin is free and open source. So far it can:
 - Fake out WPScan and bots by hiding your real usernames, instead supplying them with fake ones they will never be able to log in with.
 
-![Faking WPScan username enumeration](https://raw.githubusercontent.com/GSMcNamara/Wordpress-Counterespionage-Firewall/master/counterespionage-firewall/assets/faking-wpscan-username-gathering.png)
+![Faking WPScan username enumeration](https://raw.githubusercontent.com/GSMcNamara/Wordpress-Counterespionage-Firewall/master/counterespionage-firewall/assets/screenshot-1.png)
 
 ...and detect and block:
 

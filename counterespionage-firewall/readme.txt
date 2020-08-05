@@ -5,7 +5,7 @@ Tags: espionage, recon, reconnaissance, intelligence, intel, security, defense, 
 Requires at least: 5.3.2
 Tested up to: 5.4.2
 Requires PHP: 7.0.33
-Stable tag: 1.3.0
+Stable tag: 1.4.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html
 
@@ -17,7 +17,10 @@ Floodspark Counterespionage Firewall (CEF) helps you block reconnaissance or oth
 
 Using Intent Indicators, CEF can detect and protect earlier than an Indicators of Compromise (IoCs) or IP blacklist-based solution. Our goal is to help you increase performance, reduce fraud, thwart attacks, and serve your real customers.
 
-So far CEF for WordPress can detect and block:
+So far CEF for WordPress can:
+* Fake out WPScan and bots by hiding your real usernames, instead supplying them with fake ones they will never be able to log in with.
+
+...and detect and block:
 * Tor browser, with minor delay
 * Chrome Incognito, with minor delay, over HTTPS
 * Firefox Private Browsing, with minor delay
