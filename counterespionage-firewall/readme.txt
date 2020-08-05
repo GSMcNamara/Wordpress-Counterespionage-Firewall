@@ -69,7 +69,7 @@ An IOC indicates that a breach already took place, allowing you only to respond 
 == Changelog ==
 
 = 1.4.0 =
-* CEF now disrupts hacker attempts at username enumeration
+* CEF now disrupts hacker attempts at username gathering/harvesting/enumeration
 
 = 1.3.0 =
 * Fakes most current version of PHP
