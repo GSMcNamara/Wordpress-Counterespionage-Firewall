@@ -389,6 +389,14 @@ function remove_author_from_css_body_class( $wp_classes, $extra_classes ) {
     return $wp_classes;
 }
 
+function initialize_new_user($user_id){
+	$username_aliases = get_option('fs_username_aliases');
+	$username_aliases[$user_id] = fs_generate_username_alias();
+	update_option('fs_username_aliases',$username_aliases);
+}
+
+add_action( 'user_register', 'initialize_new_user', 10, 1 );
+
 add_filter( 'body_class', 'remove_author_from_css_body_class', 10, 2 );
 
 add_action( 'parse_request', 'fs_proxy_the_author_url' );
