@@ -395,6 +395,34 @@ function initialize_new_user($user_id){
 	update_option('fs_username_aliases',$username_aliases);
 }
 
+add_filter('authenticate', 'fs_check_for_login_attempt_with_username_alias', 20, 3);
+function fs_check_for_login_attempt_with_username_alias($user, $username, $password) {
+	if ( is_a($user, 'WP_User') ) { return $user; }
+
+	if ( empty($username) || empty($password) ) {
+		$error = new WP_Error();
+
+		if ( empty($username) )
+			$error->add('empty_username', __('<strong>ERROR</strong>: The username field is empty.'));
+
+		if ( empty($password) )
+			$error->add('empty_password', __('<strong>ERROR</strong>: The password field is empty.'));
+
+		return $error;
+	}
+
+	$userdata = get_user_by('login', $username);
+
+	if ( !$userdata ){
+		$username_aliases = get_option('fs_username_aliases');
+		$username_alias_id = array_search($username, $username_aliases);
+		if ($username_alias_id){ //this is an attempt to login with a faked username we gave them
+			return new WP_Error( 'incorrect_password', sprintf( __( '<strong>ERROR</strong>: The password you entered for the username <strong>%1$s</strong> is incorrect. <a href="%2$s" title="Password Lost and Found">Lost your password</a>?' ), $username, wp_lostpassword_url() ) );	
+		}
+	}
+	return $user;
+}
+
 add_action( 'user_register', 'initialize_new_user', 10, 1 );
 
 add_filter( 'body_class', 'remove_author_from_css_body_class', 10, 2 );
