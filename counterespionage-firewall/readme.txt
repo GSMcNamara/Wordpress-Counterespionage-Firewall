@@ -63,8 +63,9 @@ BLUF: An Intent Indicator is earlier than an IoC. You can see why this is benefi
 An IOC indicates that a breach already took place, allowing you only to respond after the fact. Intent Indicators are the attacker’s traits, or Tactics, Techniques, and Procedures (TTPs), observable during the recon phase--traits, that with high confidence, would not belong to legitimate visitor traffic and behavior.
 
 == Screenshots ==
-1. Faking WPScan's username hunting. Real usernames were "admin", "admin2", and "admin3". No hacker can log in with these faked usernames.
+1. Faking WPScan's username hunting. Real usernames were "admin", "admin2", and "admin3". No hacker can log in with these faked usernames because they don't actually exist.
 2. Error message the visitor will receive for banned behavior or devices.
+3. Defeating hackertarget.com's WordPress username enumeration scan
 
 == Changelog ==
 
