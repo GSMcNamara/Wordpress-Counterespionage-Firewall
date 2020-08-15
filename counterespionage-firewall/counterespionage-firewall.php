@@ -9,7 +9,7 @@ Plugin URI: http://wordpress.org/extend/plugins/counterespionage-firewall
 Description: CEF protects against reconnaissance by hackers and otherwise illegitimate traffic such as bots and scrapers. Increase performance, reduce fraud, thwart attacks, and serve your real customers. Note: WP-Cron needs to be enabled or the deny and allow lists may grow indefinitely.
 Author: Floodspark
 Version: 1.4.0
-Author URI: http://floodspark.com
+Author URI: https://floodspark.com
 */
 
 ### Function: Get IP Address (http://stackoverflow.com/a/2031935)
