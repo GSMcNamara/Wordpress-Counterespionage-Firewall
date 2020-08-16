@@ -417,7 +417,7 @@ function fs_check_for_login_attempt_with_username_alias($user, $username, $passw
 		$username_aliases = get_option('fs_username_aliases');
 		$username_alias_id = array_search($username, $username_aliases);
 		if ($username_alias_id){ //this is an attempt to login with a faked username we gave them
-			return new WP_Error( 'incorrect_password', sprintf( __( '<strong>ERROR</strong>: The password you entered for the username <strong>%1$s</strong> is incorrect. <a href="%2$s" title="Password Lost and Found">Lost your password</a>?' ), $username, wp_lostpassword_url() ) );	
+			return new WP_Error( 'incorrect_password', sprintf( __( '<strong>Error</strong>: The password you entered for the username <strong>%1$s</strong> is incorrect. <a href="%2$s" title="Password Lost and Found">Lost your password</a>?' ), $username, wp_lostpassword_url() ) );	
 		}
 	}
 	return $user;
