@@ -423,8 +423,8 @@ function fs_check_for_login_attempt_with_username_alias($user, $username, $passw
 	return $user;
 }
 
-add_filter('template_redirect', 'fs_non_existent_plugin_404_override' );
-function fs_non_existent_plugin_404_override() {
+add_filter('template_redirect', 'fs_plugin_and_theme_deception' );
+function fs_plugin_and_theme_deception() {
     global $wp_query;
 
     if ($wp_query->is_404 and (strpos($wp_query->query["pagename"] , "wp-content/plugins/") === 0)) {
@@ -446,6 +446,20 @@ function fs_non_existent_plugin_404_override() {
 <hr>
 </body></html>
 ';
+        die();
+    }
+
+    //for some reason, requests to the root of non-existent themes result in a 500 error. So we must emulate.
+    if ($wp_query->is_404 and (strpos($wp_query->query["pagename"] , "wp-content/themes/") === 0)) {
+        status_header( 500 );
+        $wp_query->is_404=false;
+
+        //removing some headers to emulate a real Apache 500 response
+		header_remove('Expires');
+		header_remove('Cache-Control');
+		header_remove('Link');
+
+        echo "";
         die();
     }
 }
