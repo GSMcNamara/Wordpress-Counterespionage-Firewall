@@ -64,8 +64,10 @@ An IOC indicates that a breach already took place, allowing you only to respond 
 
 == Screenshots ==
 1. Faking WPScan's username hunting. Real usernames were "admin", "admin2", and "admin3". No hacker can log in with these faked usernames because they don't actually exist.
-2. Error message the visitor will receive for banned behavior or devices.
-3. Defeating hackertarget.com's WordPress username enumeration scan
+2. Defeating WPScan's plugin scan
+3. Defeating WPScan's theme scan
+4. Error message the visitor will receive for banned behavior or devices.
+5. Defeating hackertarget.com's WordPress username enumeration scan
 
 == Changelog ==
 
