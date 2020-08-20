@@ -19,6 +19,7 @@ Using Intent Indicators, CEF can detect and protect earlier than an Indicators o
 
 So far CEF for WordPress can:
 * Fake out WPScan and bots by hiding your real usernames, instead supplying them with fake ones they will never be able to log in with.
+* Defeat WPScan's aggressive plugin and theme scans, causing the scanner to terminate.
 
 ...and detect and block:
 * Tor browser, with minor delay
