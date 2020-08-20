@@ -435,7 +435,7 @@ function fs_non_existent_plugin_404_override() {
 		header_remove('X-Powered-By');
 		header_remove('Expires');
 		header_remove('Cache-Control');
-		
+
         //returning HTML to emulate a real Apache 403 response, including the trailing newline
         echo '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
 <html><head>
