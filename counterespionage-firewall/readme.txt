@@ -1,11 +1,11 @@
 === Counterespionage Firewall ===
 Contributors: floodspark
 Donate link: http://floodspark.com/donate.html
-Tags: espionage, recon, reconnaissance, intelligence, intel, security, defense, bots, fraud
+Tags: espionage, recon, reconnaissance, intelligence, intel, cybersecurity, defense, bots, fraud, security, hackers
 Requires at least: 5.3.2
 Tested up to: 5.5
 Requires PHP: 7.0.33
-Stable tag: 1.4.0
+Stable tag: 1.5.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html
 
@@ -71,6 +71,9 @@ An IOC indicates that a breach already took place, allowing you only to respond 
 
 == Changelog ==
 
+= 1.5.0 = 
+* CEF now disrupts hacker attempts at plugin and theme gathering/harvesting/enumeration
+
 = 1.4.0 =
 * CEF now disrupts hacker attempts at username gathering/harvesting/enumeration
 
@@ -91,6 +94,9 @@ An IOC indicates that a breach already took place, allowing you only to respond 
 * Initial public release
 
 == Upgrade Notice ==
+
+= 1.5.0 = 
+We tripled CEF's WordPress-specific defenses to include plugin and theme scanning protection on top of username protection.
 
 = 1.4.0 =
 CEF now hides your real usernames from hackers. [Read about this unique approach on our blog](https://floodspark.com/blog/information-warfare-vs-security-through-obscurity/)
