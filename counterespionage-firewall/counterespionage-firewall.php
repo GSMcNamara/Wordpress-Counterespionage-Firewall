@@ -423,6 +423,33 @@ function fs_check_for_login_attempt_with_username_alias($user, $username, $passw
 	return $user;
 }
 
+add_filter('template_redirect', 'fs_non_existent_plugin_404_override' );
+function fs_non_existent_plugin_404_override() {
+    global $wp_query;
+
+    if ($wp_query->is_404 and (strpos($wp_query->query["pagename"] , "wp-content/plugins/") === 0)) {
+        status_header( 403 );
+        $wp_query->is_404=false;
+
+        //removing some headers to emulate a real Apache 403 response
+		header_remove('X-Powered-By');
+		header_remove('Expires');
+		header_remove('Cache-Control');
+		
+        //returning HTML to emulate a real Apache 403 response, including the trailing newline
+        echo '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<html><head>
+<title>403 Forbidden</title>
+</head><body>
+<h1>Forbidden</h1>
+<p>You don\'t have permission to access this resource.</p>
+<hr>
+</body></html>
+';
+        die();
+    }
+}
+
 add_action( 'user_register', 'initialize_new_user', 10, 1 );
 
 add_filter( 'body_class', 'remove_author_from_css_body_class', 10, 2 );
