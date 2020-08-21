@@ -19,7 +19,7 @@ Using Intent Indicators, CEF can detect and protect earlier than an Indicators o
 
 So far CEF for WordPress can:
 * Fake out WPScan and bots by hiding your real usernames, instead supplying them with fake ones they will never be able to log in with.
-* Defeat WPScan's aggressive plugin and theme scans, causing the scanner to terminate.
+* Defeat WPScan's aggressive plugin and theme scans, also causing the scanner to terminate.
 
 ...and detect and block:
 * Tor browser, with minor delay
@@ -36,6 +36,18 @@ Feedback is greatly appreciated as we continue to shape Floodspark and expand wh
 Stay up to date with developments in the Floodspark portfolio: [http://floodspark.com/uptodate.html](http://floodspark.com/uptodate.html)
 
 == Frequently Asked Questions ==
+
+= How can I test CEF's protection? =
+Using the Docker version of WPScan...
+
+* To verify that CEF deceives WPScan's username scan, issue the following command:
+docker run -it --rm wpscanteam/wpscan --url http://[yourbloghere.com] --enumerate u
+
+* To verify that CEF deceives WPScan's plugin scan, issue the following command:
+docker run -it --rm wpscanteam/wpscan --url http://[yourbloghere.com] --plugins-detection aggressive
+
+* To verify that CEF deceives WPScan's theme scan, issue the following command:
+docker run -it --rm wpscanteam/wpscan --url http://[yourbloghere.com] --enumerate t
 
 = Does CEF replace a Web Application Firewall (WAF)? = 
 
