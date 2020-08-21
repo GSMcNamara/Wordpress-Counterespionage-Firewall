@@ -38,7 +38,7 @@ Stay up to date with developments in the Floodspark portfolio: [http://floodspar
 == Frequently Asked Questions ==
 
 = How can I test CEF's protection? =
-Using the Docker version of WPScan...
+Use the Docker version of WPScan and the commands below. When prompted whether to update the database, you shouldn't need to.
 
 * To verify that CEF deceives WPScan's username scan, issue the following command:
 docker run -it --rm wpscanteam/wpscan --url http://[yourbloghere.com] --enumerate u
