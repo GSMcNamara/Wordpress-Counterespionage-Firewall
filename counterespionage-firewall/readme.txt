@@ -13,15 +13,13 @@ The Floodspark Counterespionage Firewall (CEF) WordPress plugin helps you block 
 
 == Description ==
 
-Floodspark Counterespionage Firewall (CEF) helps you block reconnaissance or otherwise illegitimate traffic. CEF is like a web application firewall (WAF) but protects against reconnaissance. CEF focuses on pre-attack protection and is designed to complement security plugins such as Wordfence or Sucuri.
+Floodspark Counterespionage Firewall (CEF) helps you block reconnaissance or otherwise illegitimate traffic. CEF is like a web application firewall (WAF) but protects against intelligence gathering. CEF focuses on pre-attack protection and is designed to complement security plugins such as Wordfence or Sucuri.
 
-Using Intent Indicators, CEF can detect and protect earlier than an Indicators of Compromise (IoCs) or IP blacklist-based solution. Our goal is to help you increase performance, reduce fraud, thwart attacks, and serve your real customers.
-
-So far CEF for WordPress can:
+So far CEF can:
 * Fake out WPScan and bots by hiding your real usernames, instead supplying them with fake ones they will never be able to log in with.
 * Defeat WPScan's aggressive plugin and theme scans, also causing the scanner to terminate.
 
-...and detect and block:
+...as well as detect and block:
 * Tor browser, with minor delay
 * Chrome Incognito, with minor delay, over HTTPS
 * Firefox Private Browsing, with minor delay
@@ -30,10 +28,6 @@ So far CEF for WordPress can:
 * Wget in its default configuration
 * HTTP methods other than GET, POST, and HEAD
 * Proxy probing
-
-Feedback is greatly appreciated as we continue to shape Floodspark and expand what it can do. Email us anytime - gs@floodspark.com. 
-
-Stay up to date with developments in the Floodspark portfolio: [http://floodspark.com/uptodate.html](http://floodspark.com/uptodate.html)
 
 == Frequently Asked Questions ==
 
@@ -126,9 +120,20 @@ Additional detection implemented and a bug fix.
 = 1.0 =
 Initial public release
 
+== How does this work? ==
+So! A hacker's usual approach for hacking into WordPress sites includes using a tool like WPScan to find out usernames as well as which plugins and themes are installed. They'll try to guess passwords for the user account(s) and also check vulnerability/exploit databases for any known vulnerabilities in any of the installed plugins or themes, and then try to hack into the site through those.
+
+But! We're aiming to disrupt that information gathering step of the attack. So when WPScan scans for usernames, we give out fake ones that don't exist. So all the password guessing attempts will be in vain. When WPScan scans for any of 88.5k plugins that might be installed, we respond that every one of them is installed. Same with themes--when WPScan scans for 400 themes, we assert that they too are all installed.
+
+So the attacker then has so much data they don't know what to trust. And they'll launch attacks against plugins and themes that don't exist, so the exploits will never work.
+
+PS, WPScan is a legit tool that we love and just use as an example.
+
 == Cyber Intent Blog ==
 The [Floodspark Cyber Intent Blog](http://floodspark.com/blog/) uses this plugin and is all about just that, cyber intent. Here we will cover the art and science of it and the developments in the Counterespionage Firewall (CEF) portfolio (CEF for WordPress and CEF Full) that turn these ideas into reality.
 
-Thank you for reading.
+== Stay up to date ==
+Stay up to date with developments in the Floodspark portfolio: [http://floodspark.com/uptodate.html](http://floodspark.com/uptodate.html)
 
-GS McNamara, Founder
+== Thank you == 
+Feedback is greatly appreciated as we continue to shape Floodspark. Email us anytime - gs@floodspark.com. 
