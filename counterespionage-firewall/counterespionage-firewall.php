@@ -427,17 +427,20 @@ add_filter('template_redirect', 'fs_plugin_and_theme_deception' );
 function fs_plugin_and_theme_deception() {
     global $wp_query;
 
-    if ($wp_query->is_404 and (strpos($wp_query->query["pagename"] , "wp-content/plugins/") === 0)) {
-        status_header( 403 );
-        $wp_query->is_404=false;
+    //can't use strpos === 0 here because of blogs that aren't located at /
+    if ($wp_query->is_404){ 
+    	//for some reason WP doesn't always have pagename in the wp_query object, so a second check against REQUEST_URI
+    	if (strpos($wp_query->query["pagename"] , "wp-content/plugins/") !== false or strpos($_SERVER['REQUEST_URI'], "wp-content/plugins/") !== false) {
+	        status_header( 403 );
+	        $wp_query->is_404=false;
 
-        //removing some headers to emulate a real Apache 403 response
-		header_remove('X-Powered-By');
-		header_remove('Expires');
-		header_remove('Cache-Control');
+	        //removing some headers to emulate a real Apache 403 response
+			header_remove('X-Powered-By');
+			header_remove('Expires');
+			header_remove('Cache-Control');
 
-        //returning HTML to emulate a real Apache 403 response, including the trailing newline
-        echo '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+	        //returning HTML to emulate a real Apache 403 response, including the trailing newline
+	        echo '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
 <html><head>
 <title>403 Forbidden</title>
 </head><body>
@@ -446,21 +449,24 @@ function fs_plugin_and_theme_deception() {
 <hr>
 </body></html>
 ';
-        die();
-    }
+        	die();
+    	}
 
-    //for some reason, requests to the root of non-existent themes result in a 500 error. So we must emulate.
-    if ($wp_query->is_404 and (strpos($wp_query->query["pagename"] , "wp-content/themes/") === 0)) {
-        status_header( 500 );
-        $wp_query->is_404=false;
+		//for some reason, requests to the root of non-existent themes result in a 500 error. So we must emulate.
+		//can't use strpos === 0 here because of blogs that aren't located at /
+		//for some reason WP doesn't always have pagename in the wp_query object, so a second check against REQUEST_URI
+    	if (strpos($wp_query->query["pagename"] , "wp-content/themes/") !== false or strpos($_SERVER['REQUEST_URI'], "wp-content/themes/") !== false) {
+	        status_header( 500 );
+	        $wp_query->is_404=false;
 
-        //removing some headers to emulate a real Apache 500 response
-		header_remove('Expires');
-		header_remove('Cache-Control');
-		header_remove('Link');
+	        //removing some headers to emulate a real Apache 500 response
+			header_remove('Expires');
+			header_remove('Cache-Control');
+			header_remove('Link');
 
-        echo "";
-        die();
+	        echo "";
+	        die();
+	    }
     }
 }
 
