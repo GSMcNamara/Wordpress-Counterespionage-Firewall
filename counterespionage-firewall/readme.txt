@@ -5,7 +5,7 @@ Tags: espionage, recon, reconnaissance, intelligence, intel, cybersecurity, defe
 Requires at least: 5.3.2
 Tested up to: 5.5
 Requires PHP: 7.0.33
-Stable tag: 1.5.0
+Stable tag: 1.5.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html
 
@@ -79,6 +79,9 @@ An IOC indicates that a breach already took place, allowing you only to respond 
 
 == Changelog ==
 
+= 1.5.1 = 
+* Bug fix: async checks now also work for sites not located in the root folder
+
 = 1.5.0 = 
 * CEF now disrupts hacker attempts at plugin and theme gathering/harvesting/enumeration
 
@@ -131,7 +134,7 @@ So the attacker then has so much data they don't know what to trust. And they'll
 PS, WPScan is a legit tool that we love and just use as an example.
 
 == WARNING ==
-Endurance Cache / Endurance Page Cache (perhaps installed by your hosting provider) will likely cause issues when it caches blocked pages. Setting this to "Off (Level 0)" is recommended. This is found under Settings > General > Endurance Cache in you admin dashboard. We are looking into a workaround. 
+Endurance Cache / Endurance Page Cache (perhaps installed by your hosting provider) will likely cause issues when it caches blocked pages. Setting this to "Off (Level 0)" is recommended. This is found under Settings > General > Endurance Cache in you admin dashboard (see screenshot #6). We are looking into a workaround. 
 
 
 == Cyber Intent Blog ==

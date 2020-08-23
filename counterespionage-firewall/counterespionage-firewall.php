@@ -1,7 +1,7 @@
 <?php
 /**
  * @package Counterespionage_Firewall
- * @version 1.5.0
+ * @version 1.5.1
  */
 /*
 Plugin Name: Counterespionage Firewall
