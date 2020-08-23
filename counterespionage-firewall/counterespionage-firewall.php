@@ -160,6 +160,10 @@ function fs_cef_register_floodspark_routes() {
 
 function fs_cef_load_javascript () {
 	wp_enqueue_script( 'fs-js', plugin_dir_url( __FILE__ ) . 'js/fs.js');
+	//below is added for cases where WP is installed in a subdirectory, e.g. example.com/blog instead of example.com/
+	wp_localize_script('fs-js', 'fsScript', array(
+    'pluginsUrl' => site_url( '', 'relative'),
+	));
 }
 
 function fs_cef_activate(){
