@@ -75,6 +75,7 @@ An IOC indicates that a breach already took place, allowing you only to respond 
 3. Defeating WPScan's theme scan
 4. Error message the visitor will receive for banned behavior or devices.
 5. Defeating hackertarget.com's WordPress username enumeration scan
+6. Recommended setting for Endurance Cache / Endurance Page Cache to avoid issues
 
 == Changelog ==
 
@@ -128,6 +129,10 @@ But! We're aiming to disrupt that information gathering step of the attack. So w
 So the attacker then has so much data they don't know what to trust. And they'll launch attacks against plugins and themes that don't exist, so the exploits will never work.
 
 PS, WPScan is a legit tool that we love and just use as an example.
+
+== WARNING ==
+Endurance Cache / Endurance Page Cache (perhaps installed by your hosting provider) will likely cause issues when it caches blocked pages. Setting this to "Off (Level 0)" is recommended. This is found under Settings > General > Endurance Cache in you admin dashboard. We are looking into a workaround. 
+
 
 == Cyber Intent Blog ==
 The [Floodspark Cyber Intent Blog](http://floodspark.com/blog/) uses this plugin and is all about just that, cyber intent. Here we will cover the art and science of it and the developments in the Counterespionage Firewall (CEF) portfolio (CEF for WordPress and CEF Full) that turn these ideas into reality.
