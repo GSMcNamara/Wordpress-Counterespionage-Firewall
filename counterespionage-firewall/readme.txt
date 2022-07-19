@@ -17,7 +17,7 @@ Floodspark Counterespionage Firewall (CEF) helps you block reconnaissance or oth
 
 CEF can:
 * Fake out WPScan and bots by hiding your real usernames, instead supplying them with fake ones they will never be able to log in with.
-* Prevent bots from logging in even with your real password
+* Prevent bots from logging in even with your real password.
 * Defeat WPScan's aggressive plugin and theme scans, also causing the scanner to terminate.
 
 ...as well as detect:
