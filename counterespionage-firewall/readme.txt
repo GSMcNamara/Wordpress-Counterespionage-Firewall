@@ -80,6 +80,9 @@ An IOC indicates that a breach already took place, allowing you only to respond 
 
 == Changelog ==
 
+= 1.6.0 = 
+* Feature: When an IP on the deny list uses legitimate credentials to attempt to log in, they will still be presented with a wrong password message.
+
 = 1.5.2 = 
 * Bug fix: no longer blocking on non-sensitive pages (caching issue)
 
