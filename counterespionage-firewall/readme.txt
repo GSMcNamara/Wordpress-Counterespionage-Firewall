@@ -35,13 +35,13 @@ So far CEF can:
 Use the Docker version of WPScan and the commands below. When prompted whether to update the database, you shouldn't need to.
 
 * To verify that CEF deceives WPScan's username scan, issue the following command:
-docker run -it --rm wpscanteam/wpscan --url http://[yourbloghere.com] --enumerate u
+	docker run -it --rm wpscanteam/wpscan --url http://[yourbloghere.com] --enumerate u
 
 * To verify that CEF deceives WPScan's plugin scan, issue the following command:
-docker run -it --rm wpscanteam/wpscan --url http://[yourbloghere.com] --plugins-detection aggressive
+	docker run -it --rm wpscanteam/wpscan --url http://[yourbloghere.com] --plugins-detection aggressive
 
 * To verify that CEF deceives WPScan's theme scan, issue the following command:
-docker run -it --rm wpscanteam/wpscan --url http://[yourbloghere.com] --enumerate t
+	docker run -it --rm wpscanteam/wpscan --url http://[yourbloghere.com] --enumerate t
 
 = Does CEF replace a Web Application Firewall (WAF)? = 
 
