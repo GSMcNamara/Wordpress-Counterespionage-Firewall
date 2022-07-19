@@ -12,6 +12,9 @@ Version: 1.5.2
 Author URI: https://floodspark.com
 */
 
+define("ALLOW", "allow");
+define("DENY", "deny");
+
 ### Function: Get IP Address (http://stackoverflow.com/a/2031935)
 function fs_cef_get_ip() {
 	foreach ( array( 'HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'HTTP_X_FORWARDED', 'HTTP_X_CLUSTER_CLIENT_IP', 'HTTP_FORWARDED_FOR', 'HTTP_FORWARDED', 'REMOTE_ADDR' ) as $key ) {
@@ -34,9 +37,9 @@ function fs_die (){
 	//wp_die($message = 'Unauthorized device or behavior. Please revisit in ten minutes with a valid browser.', $title = 'Unauthorized', $args = ($response = 403));
 }
 
-//check both black and white lists
+//check both allow and deny
 function fs_cef_check_lists($ip){
-	$list = get_option('fs_bw_list');
+	$list = get_option('fs_ad_list');
 	if(is_array($list) and !empty($list)){
 		if (array_key_exists($ip,$list)){
 			return $list[$ip]["list_type"];
@@ -46,9 +49,9 @@ function fs_cef_check_lists($ip){
 }
 
 function fs_cef_add_to_list($ip, $list_type){
-	$list = get_option('fs_bw_list');
+	$list = get_option('fs_ad_list');
 	$list[$ip] = array("list_type" => $list_type, "expire" => time() + 600); //setting expiration time for 10 mins into future
-	update_option('fs_bw_list',$list);
+	update_option('fs_ad_list',$list);
 }
 
 //user agent string validation method:
@@ -75,8 +78,8 @@ function fs_cef_check_request_method(){
 	return false;
 }
 
-function fs_cef_blacklist_and_die($ip){
-	fs_cef_add_to_list($ip, "black");
+function fs_cef_denylist_and_die($ip){
+	fs_cef_add_to_list($ip, DENY);
 	fs_die();
 }
 
@@ -87,16 +90,16 @@ function fs_cef_validate() {
 		return;
 	}
 	$result = fs_cef_check_lists($ip);	
-	if($result == "black"){
+	if($result == DENY){
 		fs_die();	
-	}elseif($result == "white"){
+	}elseif($result == ALLOW){
 		return;	
 	}else{ //do validations
 		if(fs_cef_check_ua()){
-			fs_cef_blacklist_and_die($ip);
+			fs_cef_denylist_and_die($ip);
 		}
 		if(fs_cef_check_request_method()){
-			fs_cef_blacklist_and_die($ip);
+			fs_cef_denylist_and_die($ip);
 		}
 	}
 }
@@ -107,9 +110,9 @@ function fs_cef_receive_values($request) {
 		return;
 	}
 	$result = fs_cef_check_lists($ip);	
-	if($result == "black"){
+	if($result == DENY){
 		fs_die();	
-	}elseif($result == "white"){
+	}elseif($result == ALLOW){
 		return;	
 	}else{ //do validations
 		$json = file_get_contents('php://input', FALSE, NULL, 0, 500); //limiting input to first 500 bytes to limit any attacks with huge values
@@ -119,14 +122,14 @@ function fs_cef_receive_values($request) {
 			//tor check
 			if (array_key_exists("screen.height", $input_json) and array_key_exists("window.innerHeight", $input_json)){
 				if ($input_json["screen.height"] == $input_json["window.innerHeight"]){
-					fs_cef_blacklist_and_die($ip);
+					fs_cef_denylist_and_die($ip);
 				}
 			}
 	
 			//Chrome incognito check
 			if (array_key_exists("storage", $input_json)){
 				if ($input_json["storage"] < 120000000){
-					fs_cef_blacklist_and_die($ip);
+					fs_cef_denylist_and_die($ip);
 				}
 			}
 
@@ -134,14 +137,14 @@ function fs_cef_receive_values($request) {
 			$ffp_key = "browser.firefox.private";
 			if (array_key_exists($ffp_key, $input_json)){
 				if ($input_json[$ffp_key] == true){
-					fs_cef_blacklist_and_die($ip);
+					fs_cef_denylist_and_die($ip);
 				}
 			}
 
 			//Chrome Selenium check
 			if (array_key_exists("navigator.webdriver", $input_json)){
 				if ($input_json["navigator.webdriver"] == true){
-					fs_cef_blacklist_and_die($ip);
+					fs_cef_denylist_and_die($ip);
 				}
 			}
 		}
@@ -168,8 +171,8 @@ function fs_cef_load_javascript () {
 }
 
 function fs_cef_activate(){
-	add_option('fs_bw_list');
-	update_option('fs_bw_list',array());
+	add_option('fs_ad_list');
+	update_option('fs_ad_list',array());
 
 	add_option('fs_username_aliases');
 
@@ -185,18 +188,19 @@ function fs_cef_activate(){
 }
 
 function fs_cef_deactivate(){
-	delete_option('fs_bw_list');
+	delete_option('fs_bw_list'); //delete legacy option
+	delete_option('fs_ad_list');
 	delete_option('fs_username_aliases');
 }
 
 function fs_cef_list_purge_cron_exec() {
-        $list = get_option('fs_bw_list');
+        $list = get_option('fs_ad_list');
         if(is_array($list) and !empty($list)){
 		foreach ($list as $ip => $meta_data){
 			$expire_time = $meta_data["expire"];
 			if (time() >= $expire_time){
 				unset($list[$ip]);
-				update_option('fs_bw_list',$list);
+				update_option('fs_ad_list',$list);
 			}
 		}
         }
@@ -402,7 +406,7 @@ function initialize_new_user($user_id){
 
 add_filter('authenticate', 'fs_check_for_login_attempt_with_username_alias', 20, 3);
 function fs_check_for_login_attempt_with_username_alias($user, $username, $password) {
-	if ( is_a($user, 'WP_User') ) { return $user; }
+	//if ( is_a($user, 'WP_User') ) { return $user; }
 
 	if ( empty($username) || empty($password) ) {
 		$error = new WP_Error();
@@ -419,12 +423,26 @@ function fs_check_for_login_attempt_with_username_alias($user, $username, $passw
 	$userdata = get_user_by('login', $username);
 
 	if ( !$userdata ){
+
 		$username_aliases = get_option('fs_username_aliases');
 		$username_alias_id = array_search($username, $username_aliases);
-		if ($username_alias_id){ //this is an attempt to login with a faked username we gave them
+
+		if ($username_alias_id){ //this is an attempt to log in with a faked username we gave them
+			fs_cef_add_to_list(fs_cef_get_ip(), DENY);
 			return new WP_Error( 'incorrect_password', sprintf( __( '<strong>Error</strong>: The password you entered for the username <strong>%1$s</strong> is incorrect. <a href="%2$s" title="Password Lost and Found">Lost your password</a>?' ), $username, wp_lostpassword_url() ) );	
 		}
+
+	}else{ 
+
+		// The requested username is legit, but we need to check if the requesting IP is on the deny list. 
+		// If so, don't allow authentication from that IP.
+
+		$result = fs_cef_check_lists(fs_cef_get_ip());	
+		if($result == DENY){
+			return new WP_Error( 'incorrect_password', sprintf( __( '<strong>Error</strong>: The password you entered for the username <strong>%1$s</strong> is incorrect. <a href="%2$s" title="Password Lost and Found">Lost your password</a>?' ), $username, wp_lostpassword_url() ) );	
+		}	
 	}
+
 	return $user;
 }
 
