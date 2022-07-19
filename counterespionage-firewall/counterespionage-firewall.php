@@ -217,7 +217,7 @@ function fs_filter_wp_headers( $headers ) {
 	} else {
 	    @ini_set('expose_php', 'off');
 	}
-	$headers['X-Powered-By'] = 'PHP/7.4.8';
+	$headers['X-Powered-By'] = 'PHP/8.1.7';
 
     return $headers;
 }
