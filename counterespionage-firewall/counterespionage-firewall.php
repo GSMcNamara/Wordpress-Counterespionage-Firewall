@@ -1,14 +1,14 @@
 <?php
 /**
  * @package Counterespionage_Firewall
- * @version 1.5.1
+ * @version 1.5.2
  */
 /*
 Plugin Name: Counterespionage Firewall
 Plugin URI: http://wordpress.org/extend/plugins/counterespionage-firewall
 Description: CEF protects against reconnaissance by hackers and otherwise illegitimate traffic such as bots and scrapers. Increase performance, reduce fraud, thwart attacks, and serve your real customers. Note: WP-Cron needs to be enabled or the deny and allow lists may grow indefinitely.
 Author: Floodspark
-Version: 1.5.0
+Version: 1.5.2
 Author URI: https://floodspark.com
 */
 
@@ -30,7 +30,8 @@ function fs_cef_get_ip() {
 }
 
 function fs_die (){
-	wp_die($message = 'Unauthorized device or behavior. Please revisit in ten minutes with a valid browser.', $title = 'Unauthorized', $args = ($response = 403));
+	// commenting out due to caching errors
+	//wp_die($message = 'Unauthorized device or behavior. Please revisit in ten minutes with a valid browser.', $title = 'Unauthorized', $args = ($response = 403));
 }
 
 //check both black and white lists

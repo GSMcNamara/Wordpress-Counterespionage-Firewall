@@ -3,9 +3,9 @@ Contributors: floodspark
 Donate link: http://floodspark.com/donate.html
 Tags: espionage, recon, reconnaissance, intelligence, intel, cybersecurity, defense, bots, fraud, security, hackers
 Requires at least: 5.3.2
-Tested up to: 5.8.2
+Tested up to: 6.0.1
 Requires PHP: 7.0.33
-Stable tag: 1.5.1
+Stable tag: 1.5.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html
 
@@ -19,7 +19,7 @@ So far CEF can:
 * Fake out WPScan and bots by hiding your real usernames, instead supplying them with fake ones they will never be able to log in with.
 * Defeat WPScan's aggressive plugin and theme scans, also causing the scanner to terminate.
 
-...as well as detect and block:
+...as well as detect:
 * Tor browser, with minor delay
 * Chrome Incognito, with minor delay, over HTTPS
 * Firefox Private Browsing, with minor delay
@@ -55,9 +55,9 @@ No. CEF specializes in web-type intelligence and leaves the protection of other 
 
 Yes.
 
-= Why would I use CEF? =
+= Why use CEF then? =
 
-CEF helps you earlier in the cyber-attack chain, during the Reconnaissance stage, to disrupt malicious research efforts. Remember, attacks do not necessarily correlate with the research origin(s).
+CEF helps you **earlier in the cyber-attack chain, during the Reconnaissance stage,** to disrupt malicious research efforts. Remember, attacks do not necessarily correlate with the research origin(s).
 
 = What is an Intent Indicator? =
 
@@ -65,7 +65,7 @@ An Intent Indicator is a trait derived from cyber threat intelligence that with 
 
 = How is an Intent Indicator different than an Indicator of Compromise (IoC)? =
 
-BLUF: An Intent Indicator is earlier than an IoC. You can see why this is beneficial.
+BLUF: An Intent Indicator is earlier than an IoC. 
 
 An IOC indicates that a breach already took place, allowing you only to respond after the fact. Intent Indicators are the attacker’s traits, or Tactics, Techniques, and Procedures (TTPs), observable during the recon phase--traits, that with high confidence, would not belong to legitimate visitor traffic and behavior.
 
@@ -78,6 +78,9 @@ An IOC indicates that a breach already took place, allowing you only to respond 
 6. Recommended setting for Endurance Cache / Endurance Page Cache to avoid issues
 
 == Changelog ==
+
+= 1.5.2 = 
+* Bug fix: no longer blocking on non-sensitive pages (caching issue)
 
 = 1.5.1 = 
 * Bug fix: async checks now also work for sites not located in the root folder
@@ -133,15 +136,11 @@ So the attacker then has so much data they don't know what to trust. And they'll
 
 PS, WPScan is a legit tool that we love and just use as an example.
 
-== WARNING ==
-Endurance Cache / Endurance Page Cache (perhaps installed by your hosting provider) will likely cause issues when it caches blocked pages. Setting this to "Off (Level 0)" is recommended. This is found under Settings > General > Endurance Cache in you admin dashboard (see screenshot #6). We are looking into a workaround. 
-
-
 == Cyber Intent Blog ==
 The [Floodspark Cyber Intent Blog](http://floodspark.com/blog/) uses this plugin and is all about just that, cyber intent. Here we will cover the art and science of it and the developments in the Counterespionage Firewall (CEF) portfolio (CEF for WordPress and CEF Full) that turn these ideas into reality.
 
 == Stay up to date ==
-Stay up to date with developments in the Floodspark portfolio: [http://floodspark.com/uptodate.html](http://floodspark.com/uptodate.html)
+Stay up to date with developments in the Floodspark portfolio [@Floodspark](https://twitter.com/floodspark)
 
 == Thank you == 
 Feedback is greatly appreciated as we continue to shape Floodspark. Email us anytime - gs@floodspark.com. 
