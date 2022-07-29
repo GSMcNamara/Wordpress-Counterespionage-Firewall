@@ -12,8 +12,10 @@ Version: 1.6.0
 Author URI: https://floodspark.com
 */
 
+
 define("ALLOW", "allow");
 define("DENY", "deny");
+define( 'COUNTERESPIONAGE_FIREWALL_VERSION', '1.6.0' );
 
 ### Function: Get IP Address (http://stackoverflow.com/a/2031935)
 function fs_cef_get_ip() {
@@ -184,6 +186,8 @@ function fs_cef_activate(){
 	}
 	update_option('fs_username_aliases',$username_aliases);
 
+	add_option('fs_cef_settings');
+
 	register_uninstall_hook( __FILE__, 'uninstall' );
 }
 
@@ -191,6 +195,7 @@ function fs_cef_deactivate(){
 	delete_option('fs_bw_list'); //delete legacy option
 	delete_option('fs_ad_list');
 	delete_option('fs_username_aliases');
+	delete_option('fs_cef_settings');
 }
 
 function fs_cef_list_purge_cron_exec() {
@@ -525,5 +530,9 @@ add_filter( 'rest_prepare_user', 'fs_mask_username_rest_prepare_user', 10, 3 );
 add_filter( 'wp_headers', 'fs_filter_wp_headers' );
 
 add_filter( 'the_author', 'fs_filter_the_author', 10, 1 );
+
+require_once plugin_dir_path( dirname( __FILE__ ) ) . 'counterespionage-firewall/admin/counterespionage-firewall-admin.php';
+
+$plugin_admin = new Counterespionage_Firewall_Admin('counterespionage-firewall', COUNTERESPIONAGE_FIREWALL_VERSION );
 
 ?>
